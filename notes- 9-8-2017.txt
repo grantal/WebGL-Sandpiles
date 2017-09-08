@@ -1,0 +1,40 @@
+sandpile stuff
+
+	code structure
+		index.html calls js scripts which do stuff
+			create ui
+			interact with webgl
+			do algorithms
+			etc
+		algorithms.js - finding identity, markov process, stabilize, etc
+		controller.js - user input like click and zoom
+		shader_interface.js - step, draw, set, get
+		texture_interface.js - add, dualize, fire vector, save, etc
+		user_interface.js - menus and sliders and stuff
+		
+		webgl stuff works like this:
+			front and back textures are initialized (with some sand maybe)
+			step:
+				front is read, rules applied, new state saved into back
+				front and back switch
+				
+			draw:
+				front is read, data displayed as colors
+				
+			run() in controller.js alternates step and draw on a timer
+			
+			At any point, can manually alter front texture (i.e. clicking)
+				this propagates as run() keeps running
+		
+	known issues
+		zoom slider wonky
+		markov process might still be wonky, double check
+		code kind of messy, needs better organization and pruning of old stuff
+		put pan on right click or something (currently a brush, dumb)
+		want popout brush palette
+		
+	further features
+		tutorials, exercises, documentation, etc (explain what's going on)
+		more mathematically interesting algorithms/buttons
+		gallery (stretch goal: user submitted gallery)
+		
