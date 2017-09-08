@@ -1,0 +1,177 @@
+body {
+ 	border: 0;
+	margin: 0;
+    background: #0e0e3f   ;
+    font-family: sans-serif;
+    overflow:hidden;
+
+}
+
+canvas {
+	width: 100vw;
+	height: 100vh;
+	display: block;
+}
+
+
+button, select{
+	padding: 4px 10px 4px 10px;
+	border: none;
+	border-radius: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	color: #ff9966 ;
+	background-color: #000000;
+	opacity: 0.6;
+
+	
+	font-family: arial;
+	font-size: 10px;
+	font-weight: bold;
+
+	cursor: pointer;
+}
+
+button:hover, {
+	opacity: 1;
+	box-shadow: 5px;
+}
+
+input[type=text] {
+	padding: 1px 8px 2px 8px;
+	border: none;
+	border-radius: 5px;
+	margin-right: 5px;
+	width: 80px;
+	opacity: 0.6;
+}
+
+input:hover{
+	opacity: 1;
+	box-shadow: 5px;
+}
+
+
+div.all {
+	color: #ff9966; 
+}
+
+.left {
+
+}
+
+.right {
+	float:right;
+}
+
+.controls {
+	text-align:left;
+}
+
+.title {
+	text-align: center;
+	font-size: 25px;
+}
+
+.subtitle {
+	text-align: center;
+	font-size: 13px;
+}
+
+.fps {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #444;
+    font-size: 12px;
+}
+
+.brush {
+	
+}
+
+.saves {
+
+}
+
+.commands {
+	text-align:left;
+	font-size: 11px;
+}
+
+.footnotes {
+	font-size: 11px;
+}
+
+.actions {
+}
+
+.settings {
+}
+
+.instructions {
+	text-align:center;
+	font-size: 13px;
+}
+
+.padding {
+	height:20px;
+}
+
+
+
+input[type=text]:focus {border-color:blue; }
+
+input[type=submit] {
+	padding:1px 1px; 
+	background:#ccc   ; 
+	border:1  ;
+    cursor:pointer;
+    border-radius: 6px; 
+}
+
+input[type=submit]:focus {border-color:blue; }
+
+.button {
+	padding:1px 1px; 
+	background:#ccc  ; 
+	border:1   ;
+    cursor:pointer;
+    border-radius: 6px; 
+}
+
+ul li .institle{
+	text-align: left;
+	padding: 8px;
+    width: 530px;
+    font-weight: bold;
+}
+
+ul li span {
+    display: inline-block;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul li .input {
+    text-align: left;
+    width: 10px;
+    font-weight: bold;
+}
+
+ul li .result {
+    text-align: right;
+    width: 160px;
+    font-style: italic;
+}
+
+ul li .instructions {
+    text-align: left;
+    width: 525px;
+    font-style: italic;
+}
+
+
+

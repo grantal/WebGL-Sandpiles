@@ -1,0 +1,143 @@
+fixes
+	canvas size and memory issues
+		why does it crash in firefox?
+		memory issues in general
+		
+	sand on corners when I + 2 
+		so when i use naive method the issue doesn't occur
+		when i use surface method, there's an extra grain on eaach corner
+		
+features
+	small
+		// markov process mode
+		firing vector over time
+		periodic sources/sinks
+		// toggle between walls and sinks (or turn off source)
+	
+		new views
+			firing vector by rescaling
+			configurations with digit visualization
+		
+		// reorganize and declutter code
+		
+		user statistics?
+		
+		predict length of time for e.g. compute identity and warn user
+		
+	large
+		other grids?
+			draw rectangle tool
+			other types of paintbrush
+		3D???
+		mobile version 
+		
+		user options
+			loading images
+			custom color scheme
+			custom boundary or graph
+			custom firing rules (generalized to any automata?)
+			custom secret message
+			
+		explanation
+			document 
+			tooltips
+			tutorial
+			suggested exercises?
+			library of example sandpiles
+			external links
+				numberphile
+				jordan ellenberg
+				lionel levine
+				wikipedia
+		
+		user submitted sandpiles
+		saving and loading sandpiles to server or locally
+			
+		layout overhaul
+			menus instead of 50 buttons
+			maybe have the buttons rendered in webgl as well?
+			better modern web design
+			
+		alternate firing rules
+			periodic sink nodes 
+				when they receive a grain, turn into a wall which, when it receives a grain turns into a sink
+				different timings etc.
+			
+			
+			
+function and feature organization - probably lead to menu organization
+
+Initialize UI, Textures, and SAND process
+
+calling shaders (texture, set, get, step, draw, etc.)
+	set scale
+	set boundary
+
+reading and setting data
+	get/set state
+	get firing vector
+
+texture algebra
+
+running
+	start, stop, toggle, run
+		run speed
+	zoom and pan
+	event listeners for mouse and keyboard
+	user interface
+	
+algorithms
+	calculate identity
+		surface method
+		naive method
+		generalized surface method with custom d
+		burning config method
+			approx k
+			fire sink until identity
+		is_identity
+	markov process
+	stabilize
+	recurrent inverse
+	timing of all these
+		
+wishlist
+	identity
+		set flag when calculated, also save state, then just set state upon further request
+		set flag when square surface is made, so just use fast alg if graph unmodified
+			alg is
+				is saved? if so then give for free
+				is square? if so then fast alg
+				otherwise do long way
+	memory
+	// dropping sand
+	saving
+	shapes
+	// markov chain
+	sliders and toolboxes
+	zoom as plus/minus instead of slider
+	explanatory
+	turn off sources
+		remove
+		turn into others maybe
+		toggle
+		on a timer
+	// swap sinks and wall
+	uploading images
+	time series firing vector download
+	undo
+	flashing
+	toggle sinks doesn't change outdegree of border
+	forms/buttons in a toolbox for things like setting a number of sands to add everywhere
+	sandpile algebra
+	
+read levine paper
+			
+notes:
+	toggling sinks works like pause sometimes, for example when stabilizing all 4s
+		not quite! it screws things up, try adding 2 to identity while toggling sink a few times
+		try starting with all 3s and toggling the sink a few times
+	
+	stabilize is still buggy
+		I think it's the same issue as the markov chain, where check_unstable is acting incorrectly
+			it alternates 0 and 1 while the state is unstable, 
+				IT MUST NOT BE SWAPPING! wrong actually, draw doesn't swap, only step swaps, so one call to step is enough to keep the chain going. real issue was the code executing 'too fast'. ie as fast as possible instead of on some timer like start() does. 
