@@ -13,7 +13,6 @@ function SAND(canvas) {
 	this.h = canvas.height;
 	
 	this.d = 100;
-	this.scale = 12;
 	
     this.viewsize = vec2(this.w, this.h); // init zoom 
 	this.statesize = vec2(this.w, this.h);
@@ -32,11 +31,20 @@ function SAND(canvas) {
 	this.m = this.d;
 	this.n = this.d;
 	
+        // change the scale depending on size of window
+        let lowestdim = Math.min($(window).width(), $(window).height());
+        if (lowestdim < 600){
+	    this.scale = 12*Math.pow((lowestdim/600),2);
+        } else {
+            this.scale = 12;
+        }
+
         //xshift should be 1236 when window has width 600
         // similar for yshift
-        let scale = 2;
-        let xshift = (1236+(600/scale))-($(window).width()/scale)
-        let yshift = (1236+(600/scale))-($(window).height()/scale)
+        let divisor = 2;
+        // None of this math means anything, I just twiddled the numbers until it looked good
+        let xshift = ((1236+(600/divisor))-($(window).width()/divisor))+((this.scale-12)*120);
+        let yshift = ((1236+(600/divisor))-($(window).height()/divisor))+((this.scale-12)*120);
 	this.shift = vec2(xshift, yshift);
         console.log($(window).width());
         console.log($(window).height());
