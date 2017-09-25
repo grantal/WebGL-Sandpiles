@@ -32,8 +32,16 @@ function SAND(canvas) {
 	this.m = this.d;
 	this.n = this.d;
 	
-	//this.shift = vec2((-$(window).width() + this.m + 77)/(this.scale), ($(window).height() + this.n + 77)/(this.scale));
-	this.shift = vec2(800,1100);
+        //xshift should be 1236 when window has width 600
+        // similar for yshift
+        let scale = 2;
+        let xshift = (1236+(600/scale))-($(window).width()/scale)
+        let yshift = (1236+(600/scale))-($(window).height()/scale)
+	this.shift = vec2(xshift, yshift);
+        console.log($(window).width());
+        console.log($(window).height());
+	//this.shift = vec2(1236,1100);
+    
 
 
 	
