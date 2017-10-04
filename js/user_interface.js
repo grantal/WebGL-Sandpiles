@@ -917,5 +917,6 @@ function init_ui(){
 
 
 	
-	
+        // make highlights box draggable
+        $("#highlights").draggable();
 }
