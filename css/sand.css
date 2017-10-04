@@ -173,7 +173,10 @@ canvas {
 	border:none;
 }
 
-
+.highlights-number {
+    color: black;
+    width: 40px;
+}
 
 
 #resizable { width: 150px; height: 150px; padding: 0.5em; }
@@ -240,3 +243,5 @@ canvas {
 #menu ul li:hover ul, #menu ul li.over ul {
 	display:block;
 }
+
+

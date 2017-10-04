@@ -4,12 +4,13 @@
     <title>WebGL Sandpiles</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
-    <link rel="stylesheet" href="sand.css"/>
-    <link rel="stylesheet" href="sliders.css"/>
+    <link rel="stylesheet" href="css/sand.css"/>
+    <link rel="stylesheet" href="css/sliders.css"/>
+    <link rel="stylesheet" href="css/switch.css"/>
     <script src="lib/igloo-0.0.3.js"></script>
     <script src="lib/jquery-2.1.1.min.js"></script>  	
 	
-	<link rel="stylesheet" href="jquery-ui.min.css"> 
+	<link rel="stylesheet" href="css/jquery-ui.min.css"> 
 	<script src="lib/external/jquery/jquery.js"></script>
 	<script src="lib/jquery-ui.min.js"></script>
 	<!-- 
@@ -33,10 +34,83 @@
     <div class="top">Highlights
       <button class="close">X</button>
     </div>
-    <form>
-      <input id="boop" value="my sandpile" type="text">
-      <button type="submit">Download state</button>
-    </form>
+    <table>
+      <tr>
+        <form>
+          <td><label for="dropsand">Drop Sand:</label></td>
+          <td><input id="dropsand" class="highlights-number" value="1" type="number" size="4"></td>
+          <td>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="droponoffswitch" checked>
+              <label class="onoffswitch-label" for="droponoffswitch">
+                  <span class="onoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <form>
+          <td><label for="ngrains">n Grains Each Cell</label></td>
+          <td><input id="ngrains" class="highlights-number" value="1" type="number" size="4"></td>
+          <td>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="ngonoffswitch" checked>
+              <label class="onoffswitch-label" for="ngonoffswitch">
+                  <span class="onoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <form>
+          <td><label for="random">Drop Sand Randomly</label></td>
+          <td><input id="random" class="highlights-number" value="1" type="number" size="4"></td>
+          <td>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="randonoffswitch" checked>
+              <label class="onoffswitch-label" for="randonoffswitch">
+                  <span class="onoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <form>
+          <td><label for="identity">Indentity</label></td>
+          <td></td>
+          <td>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="idonoffswitch" checked>
+              <label class="onoffswitch-label" for="idonoffswitch">
+                  <span class="onoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <form>
+          <td><label for="identity">Toggle Markov Proccess:</label></td>
+          <td></td>
+          <td>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="markonoffswitch">
+              <label class="onoffswitch-label" for="markonoffswitch">
+                  <span class="onoffswitch-inner markonoffswitch-inner"></span>
+                  <span class="onoffswitch-switch"></span>
+              </label>
+            </div>
+          </td>
+        </form>
+      </tr>
+    </table>
   </div>
 
   </body>
