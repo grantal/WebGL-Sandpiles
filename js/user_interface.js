@@ -919,4 +919,8 @@ function init_ui(){
 	
         // make highlights box draggable
         $("#highlights").draggable();
+
+        // Make highlights buttons work
+        $("#markonoffswitch").click(function () {sand.markov_process(10);});
+
 }
