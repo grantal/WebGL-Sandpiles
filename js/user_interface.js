@@ -921,6 +921,23 @@ function init_ui(){
         $("#highlights").draggable();
 
         // Make highlights buttons work
-        $("#markonoffswitch").click(function () {sand.markov_process(10);});
+        $("#markonoffswitch").click(function highslightsMarkov() {sand.markov_process(10);});
+
+        $("#dropsandrow").click(function highlightsDropSand(){
+          // get sand height from number field
+          var n = Number($("#dropsand").val()); 
+          if (typeof n !== "number"){
+            n = 1;
+          }
+          sand.brush_height = n;
+
+          // get whether it should set sand to a height or add sand from the switch
+          var isadd = $("#droponoffswitch").prop("checked");
+          if (isadd){
+            sand.brush_type = 0;
+          } else {
+            sand.brush_type = 4;
+          }
+        });
 
 }

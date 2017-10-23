@@ -151,7 +151,7 @@ SAND.prototype.brush = function(x, y, choice, type) {
     switch(type){
         case 0:                // click to add or subtract
             if (choice){
-                state[index] += 1;
+                state[index] += this.brush_height;
             } else {
                 state[index] -= 1;
             }

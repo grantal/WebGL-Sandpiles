@@ -29,13 +29,13 @@
   <body>	
 	<canvas id="sand" width="512" height="512"></canvas>
   <!-- making the highlights box -->
-  <div id="highlights" class="toolbar" style="display: block; left: 35px; top: 55px;">
+  <div id="highlights" class="toolbar" style="display: block; left: 35px; top: 55px; width: 350px;">
     <div style="float: left;"><br><br><br></div>
-    <div class="top">Highlights
+    <div class="top"style="width: 348px;">Highlights
       <button class="close">X</button>
     </div>
     <table>
-      <tr>
+      <tr id="dropsandrow">
         <form>
           <td><label for="dropsand">Drop Sand:</label></td>
           <td><input id="dropsand" class="highlights-number" value="1" type="number" size="4"></td>
@@ -63,6 +63,7 @@
               </label>
             </div>
           </td>
+          <td><button type="submit">Go</button>
         </form>
       </tr>
       <tr>
@@ -78,6 +79,7 @@
               </label>
             </div>
           </td>
+          <td><button type="submit">Go</button>
         </form>
       </tr>
       <tr>
@@ -93,6 +95,7 @@
               </label>
             </div>
           </td>
+          <td><button type="submit">Go</button>
         </form>
       </tr>
       <tr>
