@@ -940,4 +940,20 @@ function init_ui(){
           }
         });
 
+        $('#ngrainsform').submit(function ngrains() {
+          let n = Number($("#ngrains").val()); 
+          if (typeof n !== "number"){
+            n = 1;
+          }
+          // add or set n grains to each cell
+          let isadd = $("#ngonoffswitch").prop("checked");
+          if (isadd){ 
+            sand.plus(n);
+            sand.draw()
+          } else {
+            sand.set(sand.fullstate(n));	
+          }
+          return false;
+        });
+
 }
