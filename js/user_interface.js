@@ -153,6 +153,31 @@ function force_order(f1, f2){
 	promise = first(f1).then(second(f2));
 }
 
+// sets the board to the identity
+function set_identity(){
+
+  force_order(
+    '$(".thinking").text("Computing identity...");', 
+    
+    `var id = sand.seek_identity();
+      if (id != null){
+        sand.set(sand.identity_saves[id][0]);
+      } else {
+        var m = sand.shape_choice;
+        console.log("shape choice: " + m);
+        if (m == 1 && sand.altered == 0){
+          sand.surface_method(sand.m);
+          sand.save_identity();
+          sand.draw();
+        } else {
+          sand.naive_method();
+          sand.save_identity();
+          sand.draw();}
+      }
+      $(".thinking").text("");`
+  );
+}
+
 function init_ui(){
 	var menubar = document.createElement( 'div' );
 	menubar.id = "menubar";
@@ -244,28 +269,7 @@ function init_ui(){
 			$('.thinking').text("");
 
 		}],	
-		['Compute Identity', function(){
-			force_order(
-				'$(".thinking").text("Computing identity...");', 
-				
-				'var id = sand.seek_identity();' 				+
-				'if (id != null){' 								+
-					'sand.set(sand.identity_saves[id][0]);' 	+
-				'} else {' 										+
-					'var m = sand.shape_choice;' 				+
-					'console.log("shape choice: " + m);'		+
-					'if (m == 1 && sand.altered == 0){' 		+		
-						'sand.surface_method(sand.m);' 			+
-						'sand.save_identity();' 				+
-						'sand.draw();' 							+
-					'} else {'									+		
-						'sand.naive_method();'					+
-						'sand.save_identity();' 				+
-						'sand.draw();}' 						+
-				'}'												+
-				'$(".thinking").text("");'
-			);
-		}],
+		['Compute Identity', function(){set_identity();}],
 		['Fire sink n times', function(){
 			var n = prompt("Please enter a number:", 1);
 			sand.fire_sink(n);
@@ -940,7 +944,7 @@ function init_ui(){
           }
         });
 
-        $('#ngrainsform').submit(function ngrains() {
+        $('#ngrainsform').submit(function ngrainsformsubmit() {
           let n = Number($("#ngrains").val()); 
           if (typeof n !== "number"){
             n = 1;
@@ -956,4 +960,14 @@ function init_ui(){
           return false;
         });
 
+        $('#identityform').submit(function identityformsubmit() {
+          // add or set the configuration to the identity
+          let isadd = $("#idonoffswitch").prop("checked");
+          if (isadd){ 
+            console.log("add");
+          } else {
+            set_identity();
+          }
+          return false;
+        });
 }
