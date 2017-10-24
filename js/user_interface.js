@@ -1001,4 +1001,17 @@ function init_ui(){
           }
           return false;
         });
+        $('#randomsandform').submit(function ngrainsformsubmit() {
+          let n = Number($("#random").val()); 
+          if (typeof n !== "number"){
+            n = 1;
+          }
+          // add a random grain to the board n times
+          for (let i = 0; i < n; i += 1){
+            sand.set(sand.add_random(sand.get()));
+          }
+          sand.draw();
+          return false;
+        });
+        
 }
