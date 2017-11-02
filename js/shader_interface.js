@@ -66,8 +66,8 @@ SAND.prototype.step = function() {
 
 SAND.prototype.draw = function() {
     var gl = this.gl;
-    /*
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    /*
     gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
 
 	var mat = this.translation(0,0);
@@ -92,8 +92,8 @@ SAND.prototype.draw = function() {
     return this;
     */
     //gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    this.xrot = this.xrot + 0.5;
-    this.yrot = this.yrot + 0.1;
+    this.xrot = this.xrot + 0.01;
+    this.yrot = this.yrot + 0.01;
     drawScene(gl, this.programInfo, this.buffers3d, this.xrot, this.yrot);
     return this;
 };
@@ -101,18 +101,14 @@ SAND.prototype.draw = function() {
 SAND.prototype.get = function() {
     
     var gl = this.gl, w = this.statesize.x, h = this.statesize.y;
-    /*
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffers.step);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
                             gl.TEXTURE_2D, this.textures.front, 0);
-                            */
     var state = new Float32Array(w * h * 4);
-    /*
     gl.readPixels(0, 0, w, h, gl.RGBA, gl.FLOAT, state);
 	for (var i = 0; i < state.length; i++) {   
 		state[i] = state[i]*max;
 	}  
-        */
     return state;
 	
 };
@@ -127,13 +123,11 @@ SAND.prototype.set = function(state) {
         rgba[i + 3] = state[i + 3]/max;
     }
 	 
-    /*
     gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
     
     gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0,
                      this.statesize.x, this.statesize.y,
                      gl.RGBA, gl.FLOAT, rgba);
-*/					 
     return this;
 };
 
