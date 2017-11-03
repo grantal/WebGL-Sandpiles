@@ -93,8 +93,6 @@ SAND.prototype.draw = function() {
     */
     resize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    this.xrot = this.xrot + 0.01;
-    this.yrot = this.yrot + 0.01;
     drawScene(gl, this.programInfo, this.buffers3d, this.xrot, this.yrot);
     return this;
 };

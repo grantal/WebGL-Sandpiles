@@ -171,6 +171,24 @@ $(document).ready(function() {
 });
 
 $(window).on('keydown', function(event) {
+    // arrow key controls to rotate the object
+    switch (event.keyCode) {
+      case 37: // left
+        sand.xrot -= 0.1;
+        break;
+      case 38: // up
+        sand.yrot -= 0.1;
+        break;
+      case 39: // right
+        sand.xrot += 0.1;
+        break;
+      case 40: // down
+        sand.yrot += 0.1;
+        break;
+    }
+
+    // this was already here
+    // I don't know what its for
     return !(event.keyCode === 32);
 });
 
