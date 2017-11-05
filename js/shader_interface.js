@@ -93,7 +93,11 @@ SAND.prototype.draw = function() {
     */
     resize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    drawScene(gl, this.programInfo, this.buffers3d, this.xrot, this.yrot);
+    // The programinfo variable gets set when the shaders are loaded, so this function may
+    // be called before it is ready
+    if (typeof this.programInfo !== 'undefined') {
+      drawScene(gl, this.programInfo, this.buffers3d, this.xrot, this.yrot);
+    }
     return this;
 };
 

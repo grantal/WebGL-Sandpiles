@@ -97,13 +97,11 @@ function SAND(canvas) {
     this.set_surface(this.shape_choice);
     this.set(this.fullstate(3));
     this.set_outdegree();
-    //gl.clearColor(1.0, 1.0, 0.0, 1.0);
-    //gl.clear(gl.COLOR_BUFFER_BIT);
 
-  // Stuff copied from mozilla example
+  /*
   // Vertex shader program
 
-  const vsSource = `
+  this.vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec4 aVertexColor;
 
@@ -120,42 +118,68 @@ function SAND(canvas) {
 
   // Fragment shader program
 
-  const fsSource = `
+  this.fsSource = `
     varying lowp vec4 vColor;
 
     void main(void) {
       gl_FragColor = vColor;
     }
   `;
+  */
+  // load vertex and fragment shaders
+  $('#loader').load('glsl/moz.vert', vertCB);
+  $('#loader').load('glsl/moz.frag', fragCB);
+
+
+  // Here's where we call the routine that builds all the
+  // objects we'll be drawing.
+  this.buffers3d = initBuffers(gl);
+  this.initShaders();
+  this.xrot = 0;
+  this.yrot = 0;
+
+}
+
+// callback function for when the shaders are loaded that finishes setting everything up
+SAND.prototype.initShaders = function(){
+
+  // abort if the vector shader or fragment shader are not loaded 
+  if ((typeof this.vsSource === 'undefined') || (typeof this.fsSource === 'undefined')) {
+    return false;
+  }
 
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
-  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+  const shaderProgram = initShaderProgram(this.gl, this.vsSource, this.fsSource);
 
   // Collect all the info needed to use the shader program.
   // Look up which attributes our shader program is using
   // for aVertexPosition, aVevrtexColor and also
   // look up uniform locations.
-  const programInfo = {
+  this.programInfo = {
     program: shaderProgram,
     attribLocations: {
-      vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-      vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+      vertexPosition: this.gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+      vertexColor: this.gl.getAttribLocation(shaderProgram, 'aVertexColor'),
     },
     uniformLocations: {
-      projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-      modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+      projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+      modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
     },
   };
+  return false;
+}
 
-  // Here's where we call the routine that builds all the
-  // objects we'll be drawing.
-  const buffers = initBuffers(gl);
-  this.programInfo = programInfo;
-  this.buffers3d = buffers;
-  this.xrot = 0;
-  this.yrot = 0;
+// callback function for loading the vertex shader
+function vertCB(r){
+  sand.vsSource = r;
+  sand.initShaders();
+}
 
+// callback function for loading the fragment shader
+function fragCB(r){
+  sand.fsSource = r; // set fsSource to the loaded file
+  sand.initShaders();
 }
 
 var sand = null, controller = null;
@@ -191,6 +215,8 @@ $(window).on('keydown', function(event) {
     // I don't know what its for
     return !(event.keyCode === 32);
 });
+
+
 
 
 //
