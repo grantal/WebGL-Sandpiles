@@ -134,7 +134,6 @@ function SAND(canvas) {
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   this.buffers3d = initBuffers(gl);
-  this.initShaders();
   this.xrot = 0;
   this.yrot = 0;
 
