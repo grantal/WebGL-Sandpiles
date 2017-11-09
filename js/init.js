@@ -98,45 +98,15 @@ function SAND(canvas) {
     this.set(this.fullstate(3));
     this.set_outdegree();
 
-  /*
-  // Vertex shader program
-
-  this.vsSource = `
-    attribute vec4 aVertexPosition;
-    attribute vec4 aVertexColor;
-
-    uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionMatrix;
-
-    varying lowp vec4 vColor;
-
-    void main(void) {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      vColor = aVertexColor;
-    }
-  `;
-
-  // Fragment shader program
-
-  this.fsSource = `
-    varying lowp vec4 vColor;
-
-    void main(void) {
-      gl_FragColor = vColor;
-    }
-  `;
-  */
-  // load vertex and fragment shaders
-  $('#loader').load('glsl/moz.vert', vertCB);
-  $('#loader').load('glsl/moz.frag', fragCB);
-
-
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
-  this.buffers3d = initBuffers(gl);
+  this.buffers3d = this.initBuffers(gl);
   this.xrot = 0;
   this.yrot = 0;
 
+  // load vertex and fragment shaders
+  $('#loader').load('glsl/moz.vert', vertCB);
+  $('#loader').load('glsl/moz.frag', fragCB);
 }
 
 // callback function for when the shaders are loaded that finishes setting everything up
@@ -224,7 +194,7 @@ $(window).on('keydown', function(event) {
 // Initialize the buffers we'll need. For this demo, we just
 // have one object -- a simple three-dimensional cube.
 //
-function initBuffers(gl) {
+SAND.prototype.initBuffers = function (gl) {
 
   // Create a buffer for the cube's vertex positions.
 
@@ -235,45 +205,18 @@ function initBuffers(gl) {
 
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  // Now create an array of positions for the cube.
+  // Now create an array of positions for the sandpile.
 
-  const positions = [
-    // Front face
-    -1.0, -1.0,  1.0,
-     1.0, -1.0,  1.0,
-     1.0,  1.0,  1.0,
-    -1.0,  1.0,  1.0,
-
-    // Back face
-    -1.0, -1.0, -1.0,
-    -1.0,  1.0, -1.0,
-     1.0,  1.0, -1.0,
-     1.0, -1.0, -1.0,
-
-    // Top face
-    -1.0,  1.0, -1.0,
-    -1.0,  1.0,  1.0,
-     1.0,  1.0,  1.0,
-     1.0,  1.0, -1.0,
-
-    // Bottom face
-    -1.0, -1.0, -1.0,
-     1.0, -1.0, -1.0,
-     1.0, -1.0,  1.0,
-    -1.0, -1.0,  1.0,
-
-    // Right face
-     1.0, -1.0, -1.0,
-     1.0,  1.0, -1.0,
-     1.0,  1.0,  1.0,
-     1.0, -1.0,  1.0,
-
-    // Left face
-    -1.0, -1.0, -1.0,
-    -1.0, -1.0,  1.0,
-    -1.0,  1.0,  1.0,
-    -1.0,  1.0, -1.0,
-  ];
+  let positions = [];
+  for (let i = 0; i < this.m; i += 1) {
+    for (let j = 0; j < this.n; j += 1) {
+      positions = positions.concat(
+            (i - (this.m / 2)) / (this.m / 2),
+            0,
+            (j - (this.n / 2)) / (this.n / 2)
+          );
+    }
+  }
 
   // Now pass the list of positions into WebGL to build the
   // shape. We do this by creating a Float32Array from the
@@ -297,11 +240,11 @@ function initBuffers(gl) {
 
   var colors = [];
 
-  for (var j = 0; j < faceColors.length; ++j) {
-    const c = faceColors[j];
+  for (var j = 0; j < positions.length; ++j) {
+    const c = faceColors[ j % faceColors.length];
 
     // Repeat each color four times for the four vertices of the face
-    colors = colors.concat(c, c, c, c);
+    colors = colors.concat(c);
   }
 
   const colorBuffer = gl.createBuffer();
@@ -318,14 +261,32 @@ function initBuffers(gl) {
   // indices into the vertex array to specify each triangle's
   // position.
 
-  const indices = [
-    0,  1,  2,      0,  2,  3,    // front
-    4,  5,  6,      4,  6,  7,    // back
-    8,  9,  10,     8,  10, 11,   // top
-    12, 13, 14,     12, 14, 15,   // bottom
-    16, 17, 18,     16, 18, 19,   // right
-    20, 21, 22,     20, 22, 23,   // left
-  ];
+  let indices = [];
+
+  // number of vertices defined by the array 'positions'
+  let points = positions.length / 3; 
+  console.log(points);
+
+  let width = this.m;
+  // each point will connect to the eight points around it with 8 triangles
+  // but for each 'j' we will just define the two triangles to the top left 
+  // of the point
+  for (j = 0; j < points; j++){
+    // I'll refer to 'j' as the point at index j
+    // if not on the left column
+    if (j % width != 0){
+      // if not on the first row
+      if (j > width){
+        // this adds two triangles,
+        // one is between the point above j and the point to the top left of j
+        // the other is between the top left one and the left one
+        indices = indices.concat(j, j - width, (j - width) - 1, 
+                                 j, j - 1,        (j - width) - 1);
+      }
+    }
+  }
+
+  console.log(indices);
 
   // Now send the element array to GL
 

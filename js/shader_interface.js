@@ -248,7 +248,7 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
       modelViewMatrix);
 
   {
-    const vertexCount = 36;
+    const vertexCount = 10000;
     const type = gl.UNSIGNED_SHORT;
     const offset = 0;
     gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
