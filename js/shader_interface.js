@@ -211,6 +211,7 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
 
   // Tell WebGL how to pull out the colors from the color buffer
   // into the vertexColor attribute.
+  /*
   {
     const numComponents = 4;
     const type = gl.FLOAT;
@@ -228,7 +229,7 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
     gl.enableVertexAttribArray(
         programInfo.attribLocations.vertexColor);
   }
-
+  */
   // Tell WebGL which indices to use to index the vertices
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
@@ -237,7 +238,9 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
   gl.useProgram(programInfo.program);
 
   // Set the shader uniforms
-
+  gl.uniform4f(
+      programInfo.uniformLocations.vertexColor,
+      1.0, 0.0, 0.0, 1.0);
   gl.uniformMatrix4fv(
       programInfo.uniformLocations.projectionMatrix,
       false,

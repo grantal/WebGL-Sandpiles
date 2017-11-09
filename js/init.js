@@ -129,11 +129,11 @@ SAND.prototype.initShaders = function(){
     program: shaderProgram,
     attribLocations: {
       vertexPosition: this.gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-      vertexColor: this.gl.getAttribLocation(shaderProgram, 'aVertexColor'),
     },
     uniformLocations: {
       projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+      vertexColor: this.gl.getUniformLocation(shaderProgram, 'uVertexColor'),
     },
   };
   return false;
@@ -226,7 +226,7 @@ SAND.prototype.initBuffers = function (gl) {
 
   // Now set up the colors for the faces. We'll use solid colors
   // for each face.
-
+  /*
   const faceColors = [
     [1.0,  1.0,  1.0,  1.0],    // Front face: white
     [1.0,  0.0,  0.0,  1.0],    // Back face: red
@@ -237,7 +237,7 @@ SAND.prototype.initBuffers = function (gl) {
   ];
 
   // Convert the array of colors into a table for all the vertices.
-
+  
   var colors = [];
 
   for (var j = 0; j < positions.length; ++j) {
@@ -250,7 +250,7 @@ SAND.prototype.initBuffers = function (gl) {
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
+  */
   // Build the element array buffer; this specifies the indices
   // into the vertex arrays for each face's vertices.
 
@@ -295,7 +295,7 @@ SAND.prototype.initBuffers = function (gl) {
 
   return {
     position: positionBuffer,
-    color: colorBuffer,
+    //color: colorBuffer,
     indices: indexBuffer,
   };
 }
