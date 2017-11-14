@@ -196,107 +196,98 @@ $(window).on('keydown', function(event) {
 //
 SAND.prototype.initBuffers = function (gl) {
 
-  // Create a buffer for the cube's vertex positions.
 
-  const positionBuffer = gl.createBuffer();
+  // number of buffers
+  nb = 5;
 
-  // Select the positionBuffer as the one to apply buffer
-  // operations to from here out.
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-  // Now create an array of positions for the sandpile.
-
-  let positions = [];
-  for (let i = 0; i < this.m; i += 1) {
-    for (let j = 0; j < this.n; j += 1) {
-      positions = positions.concat(
-            (i - (this.m / 2)) / (this.m / 2),
-            0,
-            (j - (this.n / 2)) / (this.n / 2)
-          );
-    }
+  // make a bunch of buffers to draw the sandpile because it is huge
+  let positionBuffers = [];
+  let indexBuffers = [];
+  for (let i = 0; i < nb; i++){
+    positionBuffers.push(gl.createBuffer());
+    indexBuffers.push(gl.createBuffer());
   }
-
-  // Now pass the list of positions into WebGL to build the
-  // shape. We do this by creating a Float32Array from the
-  // JavaScript array, then use it to fill the current buffer.
-
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-  // Now set up the colors for the faces. We'll use solid colors
-  // for each face.
-  /*
-  const faceColors = [
-    [1.0,  1.0,  1.0,  1.0],    // Front face: white
-    [1.0,  0.0,  0.0,  1.0],    // Back face: red
-    [0.0,  1.0,  0.0,  1.0],    // Top face: green
-    [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
-    [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
-    [1.0,  0.0,  1.0,  1.0],    // Left face: purple
-  ];
-
-  // Convert the array of colors into a table for all the vertices.
   
-  var colors = [];
+  let lengths = [];
 
-  for (var j = 0; j < positions.length; ++j) {
-    const c = faceColors[ j % faceColors.length];
+  // create a bunch of postion and index buffers
+  for (let l = 0; l < nb; l++){
+    let positionBuffer = positionBuffers[l];
 
-    // Repeat each color four times for the four vertices of the face
-    colors = colors.concat(c);
-  }
+    // Select the positionBuffer as the one to apply buffer
+    // operations to from here out.
 
-  const colorBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-  */
-  // Build the element array buffer; this specifies the indices
-  // into the vertex arrays for each face's vertices.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  const indexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    // Now create an array of positions for the sandpile.
 
-  // This array defines each face as two triangles, using the
-  // indices into the vertex array to specify each triangle's
-  // position.
-
-  let indices = [];
-
-  // number of vertices defined by the array 'positions'
-  let points = positions.length / 3; 
-  console.log(points);
-
-  let width = this.m;
-  // each point will connect to the eight points around it with 8 triangles
-  // but for each 'j' we will just define the two triangles to the top left 
-  // of the point
-  for (j = 0; j < points; j++){
-    // I'll refer to 'j' as the point at index j
-    // if not on the left column
-    if (j % width != 0){
-      // if not on the first row
-      if (j > width){
-        // this adds two triangles,
-        // one is between the point above j and the point to the top left of j
-        // the other is between the top left one and the left one
-        indices = indices.concat(j, j - width, (j - width) - 1, 
-                                 j, j - 1,        (j - width) - 1);
+    let positions = [];
+    // loop through this slice of the sandpile
+    for (let i = l * (this.m / nb); i < (l+1) * (this.m / nb); i += 1) {
+      for (let j = 0; j < this.n; j += 1) {
+        positions = positions.concat(
+              (i - (this.m / 2)) / (this.m / 2),
+              0,
+              (j - (this.n / 2)) / (this.n / 2)
+            );
       }
     }
+
+    // Now pass the list of positions into WebGL to build the
+    // shape. We do this by creating a Float32Array from the
+    // JavaScript array, then use it to fill the current buffer.
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    console.log(positions);
+
+    // Build the element array buffer; this specifies the indices
+    // into the vertex arrays for each face's vertices.
+
+    let indexBuffer = indexBuffers[l];
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+    // This array defines each face as two triangles, using the
+    // indices into the vertex array to specify each triangle's
+    // position.
+
+    let indices = [];
+
+    // number of vertices defined by the array 'positions'
+    let points = positions.length / 3; 
+    lengths.push(points)
+
+    let width = this.m;
+    // each point will connect to the eight points around it with 8 triangles
+    // but for each 'j' we will just define the two triangles to the top left 
+    // of the point
+    for (j = 0; j < points; j++){
+      // I'll refer to 'j' as the point at index j
+      // if not on the left column
+      if (j % width != 0){
+        // if not on the first row
+        if (j > width){
+          // this adds two triangles,
+          // one is between the point above j and the point to the top left of j
+          // the other is between the top left one and the left one
+          indices = indices.concat(j, j - width, (j - width) - 1, 
+                                   j, j - 1,        (j - width) - 1);
+        }
+      }
+    }
+
+    // Now send the element array to GL
+
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+        new Uint16Array(indices), gl.STATIC_DRAW);
   }
 
-  console.log(indices);
-
-  // Now send the element array to GL
-
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(indices), gl.STATIC_DRAW);
 
   return {
-    position: positionBuffer,
+    position: positionBuffers,
     //color: colorBuffer,
-    indices: indexBuffer,
+    indices: indexBuffers,
+    num: nb,
+    vertexCount: lengths, 
   };
 }
 

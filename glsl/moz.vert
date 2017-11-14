@@ -9,5 +9,5 @@ varying lowp vec4 vColor;
 
 void main(void) {
   gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-  vColor = uVertexColor;
+  vColor = vec4(0.0, (aVertexPosition.x + 1.0) * 0.5, (aVertexPosition.z + 1.0) * 0.5, 1.0);
 }

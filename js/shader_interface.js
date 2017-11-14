@@ -140,7 +140,7 @@ SAND.prototype.set = function(state) {
 //
 function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
   
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(0.0, 0.0, 0.3125, 1.0);  // Clear to navy blue
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -189,72 +189,55 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
               xRotation,// amount to rotate in radians
               [0, 1, 0]);       // axis to rotate around (X)
 
-  // Tell WebGL how to pull out the positions from the position
-  // buffer into the vertexPosition attribute
-  {
-    const numComponents = 3;
-    const type = gl.FLOAT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset);
-    gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexPosition);
-  }
+  // draw all the buffers
+  for (let l = 0; l < buffers.num; l++) {
 
-  // Tell WebGL how to pull out the colors from the color buffer
-  // into the vertexColor attribute.
-  /*
-  {
-    const numComponents = 4;
-    const type = gl.FLOAT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexColor,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset);
-    gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexColor);
-  }
-  */
-  // Tell WebGL which indices to use to index the vertices
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+    // Tell WebGL how to pull out the positions from the position
+    // buffer into the vertexPosition attribute
+    {
+      const numComponents = 3;
+      const type = gl.FLOAT;
+      const normalize = false;
+      const stride = 0;
+      const offset = 0;
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position[l]);
+      gl.vertexAttribPointer(
+          programInfo.attribLocations.vertexPosition,
+          numComponents,
+          type,
+          normalize,
+          stride,
+          offset);
+      gl.enableVertexAttribArray(
+          programInfo.attribLocations.vertexPosition);
+    }
 
-  // Tell WebGL to use our program when drawing
+    // Tell WebGL which indices to use to index the vertices
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices[l]);
 
-  gl.useProgram(programInfo.program);
+    // Tell WebGL to use our program when drawing
 
-  // Set the shader uniforms
-  gl.uniform4f(
-      programInfo.uniformLocations.vertexColor,
-      1.0, 0.0, 0.0, 1.0);
-  gl.uniformMatrix4fv(
-      programInfo.uniformLocations.projectionMatrix,
-      false,
-      projectionMatrix);
-  gl.uniformMatrix4fv(
-      programInfo.uniformLocations.modelViewMatrix,
-      false,
-      modelViewMatrix);
+    gl.useProgram(programInfo.program);
 
-  {
-    const vertexCount = 10000;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
-    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+    // Set the shader uniforms
+    gl.uniform4f(
+        programInfo.uniformLocations.vertexColor,
+        1.0, 0.0, 0.0, 1.0);
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        projectionMatrix);
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.modelViewMatrix,
+        false,
+        modelViewMatrix);
+
+    {
+      const vertexCount = buffers.vertexCount[l]*5;
+      const type = gl.UNSIGNED_SHORT;
+      const offset = 0;
+      gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+    }
   }
 
 }
