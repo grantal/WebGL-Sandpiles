@@ -140,7 +140,7 @@ SAND.prototype.set = function(state) {
 //
 function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
   
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+  gl.clearColor(0.0, 0.0, 0.3125, 1.0);  // Clear to navy blue, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
