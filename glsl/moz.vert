@@ -11,6 +11,7 @@ varying lowp vec4 vColor;
 
 uniform sampler2D uSampler;
 
+// I copied these 3 functions from draw.frag with slight modifications
 int max = 1048576 - 1;
 
 ivec4 decode (vec4 data){
@@ -18,7 +19,10 @@ ivec4 decode (vec4 data){
 }
 
 ivec4 get(int x, int y){ //lookup at current spot with some pixel offset
-	return decode(texture2D(uSampler, (vec2(x, y) + shift) / scale*2.0 ));
+        // if you look at the get function in draw.frag, it modifies the given xy by 'scale' and 'shift'
+        // so I go the constants for this function by modifying 'scale' and 'shift' until I go something
+        // that looked good and then I hardcoded it
+	return decode(texture2D(uSampler, (vec2(x, y) + vec2(2780.0, 2780.0)) / vec2(12288.0, 12288.0) * 2.0));
 }
 
 vec4 encode (ivec4 data){
@@ -32,6 +36,11 @@ void main(void) {
 
     // height stuff
     ivec4 cell;
+    // scale the x and z so that we get the sort of values you'd expect for
+    // gl_FragCoord in draw.frag
+    // so normally the "get" function gets the location of a cell based on
+    // the position of specific pixel, so I'm just scaling the vertex
+    // coordinates so that they line up with the size of the screen
     int x = int((aVertexPosition.x+0.5)*600.0);
     int y = int((aVertexPosition.z+0.5)*600.0);
     cell = get(x,y);
