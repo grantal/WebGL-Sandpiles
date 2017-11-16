@@ -61,6 +61,8 @@ SAND.prototype.set_speed = function(n,m) {
 SAND.prototype.run = function(n) {
 	for (var i = 0; i < n; i++){
 		sand.step();
+                this.gl.clearColor(1.0, 0.0, 0.0, 1.0);
+                this.gl.clear(gl.COLOR_BUFFER_BIT);
 	}
 	return this;
 };
