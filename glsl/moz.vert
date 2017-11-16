@@ -30,10 +30,8 @@ vec4 encode (ivec4 data){
 
 
 void main(void) {
-    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
 
     // height stuff
-    ivec4 cell;
     // scale the x and z so that we get the sort of values you'd expect for
     // gl_FragCoord in draw.frag
     // so normally the "get" function gets the location of a cell based on
@@ -41,11 +39,14 @@ void main(void) {
     // coordinates so that they line up with the size of the screen
     int x = int((aVertexPosition.x+0.5)*600.0);
     int y = int((aVertexPosition.z+0.5)*600.0);
+    ivec4 cell;
     cell = get(x,y);
 
     int size = int(abs(float(cell.r)));
 
     ivec4 result;
+    vec4 vertexAdder; // will get added to the vertex position 
+    vertexAdder = vec4(0.0, 0.0, 0.0, 0.0); // no change as default
 
     //wesley colors
 
@@ -53,16 +54,21 @@ void main(void) {
             result = ivec4(0,0,255,0);	//dark blue
     } else if (size == 1){
             result = ivec4(255,255,0,0);	//yellow
+            vertexAdder = vec4(0.0, 0.1, 0.0, 0.0); // +1y
     } else if (size == 2){
             result = ivec4(51,255,255,0);	//light blue
+            vertexAdder = vec4(0.0, 0.2, 0.0, 0.0); // +2y
     } else if (size == 3){
             result = ivec4(153,76,0,0);	//brown
+            vertexAdder = vec4(0.0, 0.3, 0.0, 0.0); // +3y
     } else if (size >= 4){
             result = ivec4(255,255,255,0);	//white
+            vertexAdder = vec4(0.0, 0.4, 0.0, 0.0); // +4y
     } 	
 
     if (cell.r < 0) {
             result = ivec4(100) - result;
+            vertexAdder = vec4(0.0, -0.1, 0.0, 0.0); // -1y
     }
 
     if (cell.g == 0){
@@ -74,4 +80,8 @@ void main(void) {
     } 
 
     vColor = encode(result);
+
+    
+    gl_Position = uProjectionMatrix * uModelViewMatrix * (aVertexPosition + vertexAdder);
+
 }
