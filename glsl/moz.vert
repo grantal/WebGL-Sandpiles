@@ -54,21 +54,21 @@ void main(void) {
             result = ivec4(0,0,255,0);	//dark blue
     } else if (size == 1){
             result = ivec4(255,255,0,0);	//yellow
-            vertexAdder = vec4(0.0, 0.1, 0.0, 0.0); // +1y
+            vertexAdder = vec4(0.0, 0.05, 0.0, 0.0); // +1y
     } else if (size == 2){
             result = ivec4(51,255,255,0);	//light blue
-            vertexAdder = vec4(0.0, 0.2, 0.0, 0.0); // +2y
+            vertexAdder = vec4(0.0, 0.1, 0.0, 0.0); // +2y
     } else if (size == 3){
             result = ivec4(153,76,0,0);	//brown
-            vertexAdder = vec4(0.0, 0.3, 0.0, 0.0); // +3y
+            vertexAdder = vec4(0.0, 0.15, 0.0, 0.0); // +3y
     } else if (size >= 4){
             result = ivec4(255,255,255,0);	//white
-            vertexAdder = vec4(0.0, 0.4, 0.0, 0.0); // +4y
+            vertexAdder = vec4(0.0, 0.2, 0.0, 0.0); // +4y
     } 	
 
     if (cell.r < 0) {
             result = ivec4(100) - result;
-            vertexAdder = vec4(0.0, -0.1, 0.0, 0.0); // -1y
+            vertexAdder = vec4(0.0, -0.05, 0.0, 0.0); // -1y
     }
 
     if (cell.g == 0){
