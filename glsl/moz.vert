@@ -4,8 +4,6 @@ attribute vec4 aVertexPosition;
 uniform vec4 uVertexColor;
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
-uniform vec2 scale;
-uniform vec2 shift;
 
 varying lowp vec4 vColor;
 

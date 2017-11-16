@@ -136,8 +136,6 @@ SAND.prototype.initShaders = function(){
       modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
       vertexColor: this.gl.getUniformLocation(shaderProgram, 'uVertexColor'),
       sampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
-      scale: this.gl.getUniformLocation(shaderProgram, 'scale'),
-      shift: this.gl.getUniformLocation(shaderProgram, 'shift'),
     },
   };
   return false;
