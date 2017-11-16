@@ -179,7 +179,7 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
 
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -6.0]);  // amount to translate
+                 [-0.0, 0.0, -4.0]);  // amount to translate
   mat4.rotate(modelViewMatrix,  // destination matrix
               modelViewMatrix,  // matrix to rotate
               yRotation,        // amount to rotate in radians
