@@ -102,7 +102,8 @@ function SAND(canvas) {
   // objects we'll be drawing.
   this.buffers3d = this.initBuffers(gl);
   this.xrot = 0;
-  this.yrot = 0;
+  this.yrot = Math.PI / 2;
+
 
   // load vertex and fragment shaders
   $('#loader').load('glsl/moz.vert', vertCB);
@@ -134,6 +135,9 @@ SAND.prototype.initShaders = function(){
       projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
       vertexColor: this.gl.getUniformLocation(shaderProgram, 'uVertexColor'),
+      sampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
+      scale: this.gl.getUniformLocation(shaderProgram, 'scale'),
+      shift: this.gl.getUniformLocation(shaderProgram, 'shift'),
     },
   };
   return false;
@@ -224,6 +228,33 @@ SAND.prototype.initBuffers = function (gl) {
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
+  // Now set up the colors for the faces. We'll use solid colors
+  // for each face.
+  /*
+  const faceColors = [
+    [1.0,  1.0,  1.0,  1.0],    // Front face: white
+    [1.0,  0.0,  0.0,  1.0],    // Back face: red
+    [0.0,  1.0,  0.0,  1.0],    // Top face: green
+    [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
+    [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
+    [1.0,  0.0,  1.0,  1.0],    // Left face: purple
+  ];
+
+  // Convert the array of colors into a table for all the vertices.
+  
+  var colors = [];
+
+  for (var j = 0; j < positions.length; ++j) {
+    const c = faceColors[ j % faceColors.length];
+
+    // Repeat each color four times for the four vertices of the face
+    colors = colors.concat(c);
+  }
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  */
   // Build the element array buffer; this specifies the indices
   // into the vertex arrays for each face's vertices.
 
@@ -238,7 +269,6 @@ SAND.prototype.initBuffers = function (gl) {
 
   // number of vertices defined by the array 'positions'
   let points = positions.length / 3; 
-  console.log(points);
 
   let width = this.m;
   // each point will connect to the eight points around it with 8 triangles
@@ -258,8 +288,6 @@ SAND.prototype.initBuffers = function (gl) {
       }
     }
   }
-
-  console.log(indices);
 
   // Now send the element array to GL
 

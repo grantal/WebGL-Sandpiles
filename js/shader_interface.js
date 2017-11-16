@@ -96,7 +96,7 @@ SAND.prototype.draw = function() {
     // The programinfo variable gets set when the shaders are loaded, so this function may
     // be called before it is ready
     if (typeof this.programInfo !== 'undefined') {
-      drawScene(gl, this.programInfo, this.buffers3d, this.xrot, this.yrot);
+      drawScene(gl, this.programInfo, this.buffers3d, this.textures.front, this.xrot, this.yrot, this);
     }
     return this;
 };
@@ -138,7 +138,7 @@ SAND.prototype.set = function(state) {
 //
 // Draw the scene. Stolen from mozila webgl example
 //
-function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
+function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sandObj) {
   
   gl.clearColor(0.0, 0.0, 0.3125, 1.0);  // Clear to navy blue, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
@@ -228,6 +228,25 @@ function drawScene(gl, programInfo, buffers, xRotation, yRotation) {
       programInfo.uniformLocations.modelViewMatrix,
       false,
       modelViewMatrix);
+
+
+    // Specify the texture to map onto the faces.
+
+    // Tell WebGL we want to affect texture unit 0
+    gl.activeTexture(gl.TEXTURE0);
+
+    // Bind the texture to texture unit 0
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+      // Tell the shader we bound the texture to texture unit 0
+    gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+
+    gl.uniform2f(
+        programInfo.uniformLocations.scale,
+        sandObj.w*sandObj.scale, sandObj.h*sandObj.scale);
+    gl.uniform2f(
+        programInfo.uniformLocations.shift,
+        sandObj.shift.x, sandObj.shift.y);
 
   {
     const vertexCount = buffers.vertexCount;
