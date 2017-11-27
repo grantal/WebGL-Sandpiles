@@ -58,3 +58,16 @@
         background-color: #CCCCCC; color: #333333;
         text-align: right;
     }
+
+/* for the 3d/2d switch */
+    .dimensionswitch-inner:after {
+        content: "2D";
+        padding-left: 10px;
+        background-color: #00FFFF; color: #553333;
+    }
+    .dimensionswitch-inner:before {
+        content: "3D";
+        padding-right: 10px;
+        background-color: #FF0000; color: #333333;
+        text-align: right;
+    }

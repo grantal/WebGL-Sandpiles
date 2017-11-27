@@ -67,8 +67,11 @@ SAND.prototype.step = function() {
 SAND.prototype.draw = function() {
     var gl = this.gl;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    /*
-    gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
+    resize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    if (this.is2D){
+        gl.bindTexture(gl.TEXTURE_2D, this.textures.front);
 
 	var mat = this.translation(0,0);
 	var matrix1 = vec3(mat[0], mat[1], mat[2]);
@@ -77,8 +80,6 @@ SAND.prototype.draw = function() {
 	
 	var scale = vec2(this.w*this.scale, this.h*this.scale)
 	
-	resize(gl.canvas);
-	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 	this.programs.draw.use()
 		.attrib('quad', this.buffers.quad, 2)
 		.uniform('matrix1', matrix1)
@@ -89,17 +90,23 @@ SAND.prototype.draw = function() {
 		.uniform('shift',  this.shift)
 		.uniform('color', this.color)
 		.draw(gl.TRIANGLE_STRIP, 4);	
-    return this;
-    */
-    resize(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    // The programinfo variable gets set when the shaders are loaded, so this function may
-    // be called before it is ready
-    if (typeof this.programInfo !== 'undefined') {
-      drawScene(gl, this.programInfo, this.buffers3d, this.textures.front, this.xrot, this.yrot, this);
+    } else { // 3D
+        // The programinfo variable gets set when the shaders are loaded, so this function may
+        // be called before it is ready
+        if (typeof this.programInfo !== 'undefined') {
+          drawScene(gl, this.programInfo, this.buffers3d, this.textures.front, this.xrot, this.yrot, this);
+        }
     }
     return this;
 };
+
+/**
+If the program is in 2d mode this will change it to 3d.
+If in 3d, it will go to 2d.
+*/
+SAND.prototype.toggle_2D_3D = function() {
+  this.is2D = !this.is2D;
+}
 
 SAND.prototype.get = function() {
     

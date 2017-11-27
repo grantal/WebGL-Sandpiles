@@ -958,6 +958,8 @@ function init_ui(){
         // Make highlights buttons work
         $("#markonoffswitch").click(function highslightsMarkov() {sand.markov_process(10);});
 
+        $("#dimensionswitch").click(function highslights2D3D() {sand.toggle_2D_3D();});
+
         $("#dropsandrow").click(function highlightsDropSand(){
           // get sand height from number field
           var n = Number($("#dropsand").val()); 

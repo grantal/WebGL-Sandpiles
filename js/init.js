@@ -98,6 +98,8 @@ function SAND(canvas) {
     this.set(this.fullstate(3));
     this.set_outdegree();
 
+  this.is2D = true;
+
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   this.buffers3d = this.initBuffers(gl);
