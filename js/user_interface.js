@@ -480,11 +480,15 @@ function init_ui(){
 	])
 	
 	var window = add_dropdown(menubar, "Window")
+	    $("#highlights").css("display","none");
 	add_options(window, [
+		['Highlights', function(){
+	                $("#highlights").css("display", "block");
+		}],
 		['Toolbox', function(){
 			document.getElementById("toolbar").style.display = "block";
 			//document.getElementById("toolbar").style.display = "block";
-		}]
+		}],
 	])
 	
 	 //var debug = add_dropdown(menubar, "Debug")
@@ -957,6 +961,11 @@ function init_ui(){
 	
         // make highlights box draggable
         $("#highlights").draggable();
+
+        // make it closeable
+        $("#highlights-close").click( function closeHighlights() {
+	    $("#highlights").css("display","none");
+        });
 
         // Make highlights buttons work
         $("#markonoffswitch").click(function highslightsMarkov() {sand.markov_process(10);});
