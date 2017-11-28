@@ -473,7 +473,10 @@ function init_ui(){
 				sand.run(n);
 				sand.draw()
 			}
-		}]
+		}],
+		['Toggle 2D/3D', function(){
+                    sand.toggle_2D_3D();
+		}],
 	])
 	
 	var window = add_dropdown(menubar, "Window")
