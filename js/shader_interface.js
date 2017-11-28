@@ -224,9 +224,6 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
   gl.useProgram(programInfo.program);
 
   // Set the shader uniforms
-  gl.uniform4f(
-      programInfo.uniformLocations.vertexColor,
-      1.0, 0.0, 0.0, 1.0);
   gl.uniformMatrix4fv(
       programInfo.uniformLocations.projectionMatrix,
       false,
@@ -235,6 +232,10 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
       programInfo.uniformLocations.modelViewMatrix,
       false,
       modelViewMatrix);
+  // color scheme also can affect the height in 3D mode
+  gl.uniform1f(
+      programInfo.uniformLocations.colorScheme,
+      sandObj.color);
 
 
     // Specify the texture to map onto the faces.
