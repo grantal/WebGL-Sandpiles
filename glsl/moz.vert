@@ -3,6 +3,7 @@ attribute vec4 aVertexPosition;
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform float uColorScheme;
+uniform float uHeightMultiplier;
 
 int color_choice = int(uColorScheme);
 
@@ -259,7 +260,7 @@ void main(void) {
 
     vec4 vertexAdder; // will get added to the vertex position 
     // it will add the height of the cell to the y of the vertex
-    vertexAdder = vec4(0.0, 0.05 * float(size), 0.0, 0.0); 
+    vertexAdder = vec4(0.0, uHeightMultiplier * float(size), 0.0, 0.0); 
 
     vColor = encode(result);
     

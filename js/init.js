@@ -99,6 +99,9 @@ function SAND(canvas) {
     this.set_outdegree();
 
   this.is2D = true;
+  // So the height data will start as integers and then in the shader we will multiply the integer
+  // height by heightMult to get the y coordinate.
+  this.heightMult = 0.05;
 
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
@@ -138,6 +141,7 @@ SAND.prototype.initShaders = function(){
       modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
       sampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
       colorScheme: this.gl.getUniformLocation(shaderProgram, 'uColorScheme'),
+      heightMult: this.gl.getUniformLocation(shaderProgram, 'uHeightMultiplier'),
     },
   };
   return false;
