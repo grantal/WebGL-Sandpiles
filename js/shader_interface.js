@@ -93,7 +93,7 @@ SAND.prototype.draw = function() {
     } else { // 3D
         // The programinfo variable gets set when the shaders are loaded, so this function may
         // be called before it is ready
-        if (typeof this.programInfo !== 'undefined') {
+        if ((typeof this.programInfo !== 'undefined') && (typeof this.buffers3d !== 'undefined')) {
           drawScene(gl, this.programInfo, this.buffers3d, this.textures.front, this.xrot, this.yrot, this);
         }
     }
@@ -105,7 +105,13 @@ If the program is in 2d mode this will change it to 3d.
 If in 3d, it will go to 2d.
 */
 SAND.prototype.toggle_2D_3D = function() {
+
   this.is2D = !this.is2D;
+
+  // if the buffers haven't been made, do it now
+  if ((!this.is2D) && (typeof this.buffers3d === 'undefined')){
+    this.buffers3d = this.initBuffers(this.gl);
+  }
 }
 
 SAND.prototype.get = function() {

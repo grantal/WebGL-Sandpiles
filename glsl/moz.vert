@@ -18,11 +18,14 @@ ivec4 decode (vec4 data){
 	return ivec4(floor(.5 + float(max) * data.r), floor(.5 + float(max) * data.g), floor(.5 + float(max) * data.b), floor(.5 + float(max) * data.a));
 }
 
-ivec4 get(int x, int y){ //lookup at current spot with some pixel offset
-        // if you look at the get function in draw.frag, it modifies the given xy by 'scale' and 'shift'
-        // so I go the constants for this function by modifying 'scale' and 'shift' until I go something
-        // that looked good and then I hardcoded it
-	return decode(texture2D(uSampler, (vec2(x, y) + vec2(2780.0, 2780.0)) / vec2(12288.0, 12288.0) * 2.0));
+ivec4 get(float givenx, float giveny){ //lookup at current spot with some pixel offset
+        // I add 0.5 to make all of the values positive,
+        // then I multiply by 100 because we have a 100 x 100 grid
+        int x = int((givenx + 0.5) * 100.0);
+        int y = int((giveny + 0.5) * 100.0);
+        // So the sandplie is in the center of the texture and the texture is 1024x1024
+        // 1024/2 = 512, 512 - (100/2) = 462
+	return decode(texture2D(uSampler, (vec2(x, y) + vec2(462.0, 462.0)) / vec2(1024.0, 1024.0)));
 }
 
 vec4 encode (ivec4 data){
@@ -45,15 +48,8 @@ int ones(int n, int base){
 void main(void) {
 
     // height stuff
-    // scale the x and z so that we get the sort of values you'd expect for
-    // gl_FragCoord in draw.frag
-    // so normally the "get" function gets the location of a cell based on
-    // the position of specific pixel, so I'm just scaling the vertex
-    // coordinates so that they line up with the size of the screen
-    int x = int((aVertexPosition.x+0.5)*600.0);
-    int y = int((aVertexPosition.z+0.5)*600.0);
     ivec4 cell;
-    cell = get(x,y);
+    cell = get(aVertexPosition.x, aVertexPosition.z);
 
     int size = int(abs(float(cell.r)));
 
