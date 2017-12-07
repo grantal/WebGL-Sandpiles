@@ -108,8 +108,18 @@ function SAND(canvas) {
   if ((!this.is2D) && (typeof this.buffers3d === 'undefined')){
     this.buffers3d = this.initBuffers(gl);
   }
-  this.xrot = 0;
-  this.yrot = Math.PI / 2;
+
+  this.modelViewMatrix = mat4.create();
+
+  // move it away from camera
+  mat4.translate(this.modelViewMatrix,     // destination matrix
+                 this.modelViewMatrix,     // matrix to translate
+                 [-0.0, 0.0, -4.0]);  // amount to translate
+  // rotate the y a bit
+  mat4.rotate(this.modelViewMatrix,  // destination matrix
+              this.modelViewMatrix,  // matrix to rotate
+              Math.PI / 2,        // amount to rotate in radians
+              [1, 0, 0]);       // axis to rotate around (Y)
 
 
   // load vertex and fragment shaders

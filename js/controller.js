@@ -245,10 +245,10 @@ function Controller(SAND) {
     var tempy;
     var speed = 10;
     $canvas.on('mousedown', function(event) {
+        lastx = event.clientX;
+        lasty = event.clientY;
         if (sand.brush_type == 7){
             _this.drag = event.which;
-            lastx = event.clientX;
-            lasty = event.clientY;
             sand.draw();
         } else {
             event.preventDefault();
@@ -263,23 +263,40 @@ function Controller(SAND) {
         _this.drag = null;
     });
     $canvas.on('mousemove', function(event) {
+        if (_this.drag) {
+            var newx = event.clientX;
+            var newy = event.clientY;
+
+            var dx = newx - lastx;
+            var dy = newy - lasty;
+            lastx = newx;
+            lasty = newy;
+        }
         if (sand.brush_type == 7){
             event.preventDefault();
             if (_this.drag) {
-                var newx = event.clientX;
-                var newy = event.clientY;
-
-/*                 console.log(sand.eventCoord(event));
-                console.log('Mouse position: ' + newx + ',' + newy);
-                console.log('View shift: ' + sand.shift.x + ',' + sand.shift.y ); */
-
-                var dx = newx - lastx;
-                var dy = newy - lasty;
-                lastx = newx;
-                lasty = newy;
-				sand.shiftby(-dx, dy)
+		sand.shiftby(-dx, dy)
 
                 sand.draw();
+            }
+        } else if (!sand.is2D) {
+            // do rotation stuff if in 3d mode
+            if (_this.drag) {
+                sand.xrot += 0.1 * dx
+                sand.yrot += 0.1 * dy
+                mat4.rotate(sand.modelViewMatrix,       // destination matrix
+                            sand.modelViewMatrix,       // matrix to rotate
+                            0.01 * dy,                  // amount to rotate in radians
+                            [sand.modelViewMatrix[0],   // axis to rotate around
+                             sand.modelViewMatrix[4],   // (first column of matrix)
+                             sand.modelViewMatrix[8]]); 
+                mat4.rotate(sand.modelViewMatrix,       // destination matrix
+                            sand.modelViewMatrix,       // matrix to rotate
+                            0.01 * dx,                  // amount to rotate in radians
+                            [sand.modelViewMatrix[1],   // axis to rotate around
+                             sand.modelViewMatrix[5],   // (second column of matrix)
+                             sand.modelViewMatrix[9]]); 
+                      
             }
         } else {
             event.preventDefault();

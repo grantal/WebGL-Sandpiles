@@ -185,11 +185,12 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  const modelViewMatrix = mat4.create();
+  const modelViewMatrix = sandObj.modelViewMatrix;
 
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
 
+  /*
   mat4.translate(modelViewMatrix,     // destination matrix
                  modelViewMatrix,     // matrix to translate
                  [-0.0, 0.0, -4.0]);  // amount to translate
@@ -201,6 +202,8 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
               modelViewMatrix,  // matrix to rotate
               xRotation,// amount to rotate in radians
               [0, 1, 0]);       // axis to rotate around (X)
+          */
+
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute
