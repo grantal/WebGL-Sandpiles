@@ -110,7 +110,14 @@ SAND.prototype.toggle_2D_3D = function() {
 
   // if the buffers haven't been made, do it now
   if ((!this.is2D) && (typeof this.buffers3d === 'undefined')){
-    this.buffers3d = this.initBuffers(this.gl);
+    // display some text and then make buffers
+    force_order(
+      '$(".thinking").text("Making Buffers...");', 
+      `
+      sand.buffers3d = sand.initBuffers(sand.gl);
+      $(".thinking").text("");
+      `
+    );
   }
 }
 
