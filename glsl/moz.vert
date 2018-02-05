@@ -263,6 +263,6 @@ void main(void) {
 
     vColor = encode(result);
     
-    gl_Position = uProjectionMatrix * uModelViewMatrix * (uGridMatrix * aVertexPosition);
+    gl_Position = uProjectionMatrix * uModelViewMatrix * uGridMatrix * (aVertexPosition + vertexAdder);
 
 }
