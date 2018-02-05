@@ -24,13 +24,11 @@ ivec4 decode (vec4 data){
 }
 
 ivec4 get(float givenx, float giveny){ //lookup at current spot with some pixel offset
-        // I add 0.5 to make all of the values positive,
-        // then I multiply by 100 because we have a 100 x 100 grid
         int x = int(givenx);
         int y = int(giveny);
         // So the sandplie is in the center of the texture and the texture is 1024x1024
         // 1024/2 = 512, 512 - (100/2) = 462
-	return decode(texture2D(uSampler, (vec2(x, y) + vec2(462.0, 462.0)) / vec2(1024.0, 1024.0)));
+	return decode(texture2D(uSampler, (vec2(x, y) + vec2(206.0, 206.0)) / vec2(512.0, 512.0)));
 }
 
 vec4 encode (ivec4 data){

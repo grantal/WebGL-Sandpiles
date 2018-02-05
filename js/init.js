@@ -127,7 +127,7 @@ function SAND(canvas) {
   // move it away from camera
   mat4.translate(this.modelViewMatrix,     // destination matrix
                  this.modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -4.0]);  // amount to translate
+                 [-0.0, 0.0, -1.5]);  // amount to translate
   // rotate the y a bit
   mat4.rotate(this.modelViewMatrix,  // destination matrix
               this.modelViewMatrix,  // matrix to rotate
