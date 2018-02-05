@@ -4,6 +4,11 @@ uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform float uColorScheme;
 uniform float uHeightMultiplier;
+// uGridMatrix will convert the points from being large integers with the corner of the grid at the origin
+// to small floats with the center of the grid at the origin
+uniform mat4 uGridMatrix;
+
+
 
 int color_choice = int(uColorScheme);
 
@@ -21,8 +26,8 @@ ivec4 decode (vec4 data){
 ivec4 get(float givenx, float giveny){ //lookup at current spot with some pixel offset
         // I add 0.5 to make all of the values positive,
         // then I multiply by 100 because we have a 100 x 100 grid
-        int x = int((givenx + 0.5) * 100.0);
-        int y = int((giveny + 0.5) * 100.0);
+        int x = int(givenx);
+        int y = int(giveny);
         // So the sandplie is in the center of the texture and the texture is 1024x1024
         // 1024/2 = 512, 512 - (100/2) = 462
 	return decode(texture2D(uSampler, (vec2(x, y) + vec2(462.0, 462.0)) / vec2(1024.0, 1024.0)));
@@ -260,6 +265,6 @@ void main(void) {
 
     vColor = encode(result);
     
-    gl_Position = uProjectionMatrix * uModelViewMatrix * (aVertexPosition + vertexAdder);
+    gl_Position = uProjectionMatrix * uModelViewMatrix * (uGridMatrix * aVertexPosition);
 
 }

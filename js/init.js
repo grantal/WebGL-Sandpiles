@@ -109,8 +109,21 @@ function SAND(canvas) {
     this.buffers3d = this.initBuffers(gl);
   }
 
-  this.modelViewMatrix = mat4.create();
 
+  // the points are, (by default) from 0 to 100 in the x and y.
+  // this will make them between -0.5 and 0.5
+  this.gridToPointsMatrix = mat4.create();
+  // center it at the origin
+  mat4.translate(this.gridToPointsMatrix,     // destination matrix
+                 this.gridToPointsMatrix,                // matrix to translate
+                 [-0.5, 0.0, -0.5]);  // amount to translate
+  // scale it down
+  mat4.scale(this.gridToPointsMatrix,                // destination matrix
+             this.gridToPointsMatrix,                // matrix to translate
+             [1 / this.m, 1.0, 1 / this.n]);  // amount to scale
+
+
+  this.modelViewMatrix = mat4.create();
   // move it away from camera
   mat4.translate(this.modelViewMatrix,     // destination matrix
                  this.modelViewMatrix,     // matrix to translate
@@ -151,6 +164,7 @@ SAND.prototype.initShaders = function(){
     uniformLocations: {
       projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: this.gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+      gridToPointsMatrix: this.gl.getUniformLocation(shaderProgram, 'uGridMatrix'),
       sampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
       colorScheme: this.gl.getUniformLocation(shaderProgram, 'uColorScheme'),
       heightMult: this.gl.getUniformLocation(shaderProgram, 'uHeightMultiplier'),
@@ -216,7 +230,7 @@ $(window).on('keydown', function(event) {
 //
 SAND.prototype.initBuffers = function (gl) {
 
-  // Create a buffer for the cube's vertex positions.
+  // Create a buffer for the sandpile's vertex positions.
 
   const positionBuffer = gl.createBuffer();
 
@@ -230,11 +244,9 @@ SAND.prototype.initBuffers = function (gl) {
   let positions = [];
   for (let i = 0; i < this.m; i += 1) {
     for (let j = 0; j < this.n; j += 1) {
-      positions = positions.concat(
-            (i - (this.m / 2)) / (this.m / 2),
-            0,
-            (j - (this.n / 2)) / (this.n / 2)
-          );
+      // all positions have y = 0 since it's a flat plane until modified by the texture in the 
+      // vertex shader
+      positions = positions.concat(i, 0, j);
     }
   }
 

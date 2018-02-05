@@ -197,20 +197,6 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
 
-  /*
-  mat4.translate(modelViewMatrix,     // destination matrix
-                 modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -4.0]);  // amount to translate
-  mat4.rotate(modelViewMatrix,  // destination matrix
-              modelViewMatrix,  // matrix to rotate
-              yRotation,        // amount to rotate in radians
-              [1, 0, 0]);       // axis to rotate around (Y)
-  mat4.rotate(modelViewMatrix,  // destination matrix
-              modelViewMatrix,  // matrix to rotate
-              xRotation,// amount to rotate in radians
-              [0, 1, 0]);       // axis to rotate around (X)
-          */
-
 
   // Tell WebGL how to pull out the positions from the position
   // buffer into the vertexPosition attribute
@@ -248,6 +234,10 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
       programInfo.uniformLocations.modelViewMatrix,
       false,
       modelViewMatrix);
+  gl.uniformMatrix4fv(
+      programInfo.uniformLocations.gridToPointsMatrix,
+      false,
+      sandObj.gridToPointsMatrix);
   // color scheme also can affect the height in 3D mode
   gl.uniform1f(
       programInfo.uniformLocations.colorScheme,
