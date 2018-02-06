@@ -235,6 +235,24 @@ SAND.prototype.brush = function(x, y, choice, type) {
     }
 };
 
+// resets modelViewMatrix to how it is when initialized
+SAND.prototype.reset_camera = function() {
+  // set modelViewMatrix to a new idetity matrix
+  this.modelViewMatrix = mat4.create();
+
+  // move it away from camera
+  mat4.translate(this.modelViewMatrix,     // destination matrix
+                 this.modelViewMatrix,     // matrix to translate
+                 [-0.0, 0.0, -1.5]);  // amount to translate
+
+  // rotate the y a bit
+  mat4.rotate(this.modelViewMatrix,  // destination matrix
+              this.modelViewMatrix,  // matrix to rotate
+              Math.PI / 2,        // amount to rotate in radians
+              [1, 0, 0]);       // axis to rotate around (Y)
+
+}
+
 
 function Controller(SAND) {
     this.sand = sand;

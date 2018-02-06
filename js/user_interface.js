@@ -477,6 +477,9 @@ function init_ui(){
 		['Toggle 2D/3D', function(){
                     sand.toggle_2D_3D();
 		}],
+		['Reset camera', function(){
+                    sand.reset_camera();
+		}],
 	])
 	
 	var window = add_dropdown(menubar, "Window")
