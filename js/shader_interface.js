@@ -110,7 +110,14 @@ SAND.prototype.toggle_2D_3D = function() {
 
   // if the buffers haven't been made, do it now
   if ((!this.is2D) && (typeof this.buffers3d === 'undefined')){
-    // display some text and then make buffers
+    this.make_buffers_wrapper()
+  }
+}
+
+/**
+Will call initBuffers and display the making buffers text
+*/
+SAND.prototype.make_buffers_wrapper = function() {
     force_order(
       '$(".thinking").text("Making Buffers...");', 
       `
@@ -118,7 +125,6 @@ SAND.prototype.toggle_2D_3D = function() {
       $(".thinking").text("");
       `
     );
-  }
 }
 
 SAND.prototype.get = function() {
@@ -245,6 +251,12 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
   gl.uniform1f(
       programInfo.uniformLocations.heightMult,
       sandObj.heightMult);
+  gl.uniform1f(
+      programInfo.uniformLocations.width,
+      sandObj.m);
+  gl.uniform1f(
+      programInfo.uniformLocations.length,
+      sandObj.n);
 
 
     // Specify the texture to map onto the faces.

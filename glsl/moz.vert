@@ -7,6 +7,8 @@ uniform float uHeightMultiplier;
 // uGridMatrix will convert the points from being large integers with the corner of the grid at the origin
 // to small floats with the center of the grid at the origin
 uniform mat4 uGridMatrix;
+uniform float uWidth;  // "x" direction (sand.m)
+uniform float uLength; // "y" direction (sand.n)
 
 
 
@@ -28,7 +30,7 @@ ivec4 get(float givenx, float giveny){ //lookup at current spot with some pixel 
         int y = int(giveny);
         // So the sandplie is in the center of the texture and the texture is 1024x1024
         // 1024/2 = 512, 512 - (100/2) = 462
-	return decode(texture2D(uSampler, (vec2(x, y) + vec2(206.0, 206.0)) / vec2(512.0, 512.0)));
+	return decode(texture2D(uSampler, ((2.0 * vec2(x, y)) + (vec2(512.0, 512.0) - vec2(uWidth, uLength))) / vec2(1024.0, 1024.0)));
 }
 
 vec4 encode (ivec4 data){

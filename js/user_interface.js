@@ -452,6 +452,11 @@ function init_ui(){
 						sand.reset();
 						sand.set_surface(sand.shape_choice, 2);
 					}
+                                        // need to reset buffers if in 3d mode
+                                        if (!sand.is2D){
+                                          sand.make_buffers_wrapper()
+                                        }
+
 				} else {
 					alert("Please choose a smaller grid. Max is " + (Math.min(sand.w, sand.h) - 2) + ".");
 				}

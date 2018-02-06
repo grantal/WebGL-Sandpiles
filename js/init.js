@@ -106,22 +106,8 @@ function SAND(canvas) {
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
   if ((!this.is2D) && (typeof this.buffers3d === 'undefined')){
-    this.buffers3d = this.initBuffers(gl);
+    this.make_buffers_wrapper()
   }
-
-
-  // the points are, (by default) from 0 to 100 in the x and y.
-  // this will make them between -0.5 and 0.5
-  this.gridToPointsMatrix = mat4.create();
-  // center it at the origin
-  mat4.translate(this.gridToPointsMatrix,     // destination matrix
-                 this.gridToPointsMatrix,                // matrix to translate
-                 [-0.5, 0.0, -0.5]);  // amount to translate
-  // scale it down
-  mat4.scale(this.gridToPointsMatrix,                // destination matrix
-             this.gridToPointsMatrix,                // matrix to translate
-             [1 / this.m, 1.0, 1 / this.n]);  // amount to scale
-
 
   // creates modelViewMatrix and tweaks it
   this.reset_camera();
@@ -159,6 +145,8 @@ SAND.prototype.initShaders = function(){
       sampler: this.gl.getUniformLocation(shaderProgram, 'uSampler'),
       colorScheme: this.gl.getUniformLocation(shaderProgram, 'uColorScheme'),
       heightMult: this.gl.getUniformLocation(shaderProgram, 'uHeightMultiplier'),
+      width: this.gl.getUniformLocation(shaderProgram, 'uWidth'),
+      length: this.gl.getUniformLocation(shaderProgram, 'uLength'),
     },
   };
   return false;
@@ -220,6 +208,18 @@ $(window).on('keydown', function(event) {
 // have one object -- a simple three-dimensional cube.
 //
 SAND.prototype.initBuffers = function (gl) {
+
+  // the points are, (by default) from 0 to 100 in the x and y.
+  // this will make them between -0.5 and 0.5
+  this.gridToPointsMatrix = mat4.create();
+  // center it at the origin
+  mat4.translate(this.gridToPointsMatrix,     // destination matrix
+                 this.gridToPointsMatrix,                // matrix to translate
+                 [-0.5, 0.0, -0.5]);  // amount to translate
+  // scale it down
+  mat4.scale(this.gridToPointsMatrix,                // destination matrix
+             this.gridToPointsMatrix,                // matrix to translate
+             [1 / this.m, 1.0, 1 / this.n]);  // amount to scale
 
   // Create a buffer for the sandpile's vertex positions.
 
