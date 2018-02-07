@@ -452,9 +452,11 @@ function init_ui(){
 						sand.reset();
 						sand.set_surface(sand.shape_choice, 2);
 					}
-                                        // need to reset buffers if in 3d mode
+                                        // if we're in 2D mode, this will remake the buffers next time we enter 3D mode
+                                        sand.buffers3d = undefined;
+                                        // if in 3d mode, we need to reset the buffers now
                                         if (!sand.is2D){
-                                          sand.make_buffers_wrapper()
+                                          sand.make_buffers_wrapper();
                                         }
 
 				} else {
