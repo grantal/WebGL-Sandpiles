@@ -265,6 +265,9 @@ void main(void) {
 
     vColor = encode(result);
     
-    gl_Position = uProjectionMatrix * uModelViewMatrix * uGridMatrix * (aVertexPosition + vertexAdder);
+    // if cell is a sink, don't render it
+    if (cell.g != 0){
+        gl_Position = uProjectionMatrix * uModelViewMatrix * uGridMatrix * (aVertexPosition + vertexAdder);
+    }
 
 }
