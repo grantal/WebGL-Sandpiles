@@ -141,6 +141,14 @@ SAND.prototype.zoom = function(coords, dir) {
         $('.zoom').text(Number((sand.scale).toFixed(1)) + 'x zoom')
     }
     //console.log("tex coord: " + texcoord);//s, "window coord: " + windowcoord, "scale: " + sand.scale)
+    // zoom in 3d
+    let transMat = mat4.create(); 
+    mat4.fromTranslation(transMat,
+                         [0.0, 0.0, dscale]);  // amount to translate
+    mat4.multiply(this.modelViewMatrix,     // destination matrix
+                   transMat,
+                   this.modelViewMatrix     // matrix to translate
+                   );
 
     sand.draw();
 };
@@ -249,7 +257,7 @@ SAND.prototype.reset_camera = function() {
   mat4.rotate(this.modelViewMatrix,  // destination matrix
               this.modelViewMatrix,  // matrix to rotate
               Math.PI / 2,        // amount to rotate in radians
-              [1, 0, 0]);       // axis to rotate around (Y)
+              [1, 0, 0]);       // axis to rotate around (X)
 
 }
 
