@@ -133,23 +133,25 @@ SAND.prototype.zoom = function(coords, dir) {
     //var windowcoord = vec2(event.originalEvent.clientX, $(window).height()  - event.originalEvent.clientY)
 
     dscale = sand.zoomspeed*sand.scale*dir
-    if (sand.scale - dscale > 0.3 && sand.scale - dscale < 300){
-        sand.scale -= dscale
-		
-		sand.shiftby(-texcoord.x*dscale, -texcoord.y*dscale)
-		
-        $('.zoom').text(Number((sand.scale).toFixed(1)) + 'x zoom')
+    if (this.is2D){
+      if (sand.scale - dscale > 0.3 && sand.scale - dscale < 300){
+          sand.scale -= dscale
+                  
+                  sand.shiftby(-texcoord.x*dscale, -texcoord.y*dscale)
+                  
+          $('.zoom').text(Number((sand.scale).toFixed(1)) + 'x zoom')
+      }
+      //console.log("tex coord: " + texcoord);//s, "window coord: " + windowcoord, "scale: " + sand.scale)
+    } else {
+      // zoom in 3d
+      let transMat = mat4.create(); 
+      mat4.fromTranslation(transMat,
+                           [0.0, 0.0, dscale]);  // amount to translate
+      mat4.multiply(this.modelViewMatrix,     // destination matrix
+                     transMat,
+                     this.modelViewMatrix     // matrix to translate
+                     );
     }
-    //console.log("tex coord: " + texcoord);//s, "window coord: " + windowcoord, "scale: " + sand.scale)
-    // zoom in 3d
-    let transMat = mat4.create(); 
-    mat4.fromTranslation(transMat,
-                         [0.0, 0.0, dscale]);  // amount to translate
-    mat4.multiply(this.modelViewMatrix,     // destination matrix
-                   transMat,
-                   this.modelViewMatrix     // matrix to translate
-                   );
-
     sand.draw();
 };
 
