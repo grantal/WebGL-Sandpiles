@@ -66,7 +66,9 @@ function SAND(canvas) {
 	
 	this.identity = null;
 	
-	this.brush_height = 0;
+        // this will set the brush so that it is in drop sand mode and
+        // it drops one grain of sand at a time
+	this.brush_height = 1;
 	this.brush_type = 0;
 	
 	this.speed = vec2(1, 1);
