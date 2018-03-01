@@ -133,20 +133,27 @@ SAND.prototype.rec_inverse = function() {
 // approximating the identity
 
 SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
-	//first guess coefficients
-
+        // d is the diameter of the circle we're going to approximate the firing vector
+        let d = n;
+        if (shape_choice === 1) {
+            d = Math.sqrt(2) * n;
+        }
+        /*
         // 1 is square
         if (shape_choice === 1) {
+	    //first guess coefficients
             var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
             var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
             var s  = Math.round(0.791548224489514*n - 1.158817405099287);
 	    var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
         // 2 is circle
-        } else if (shape_choice === 2) {
-            var intercept  = Math.round(0.3553 + (-0.2145)*n + 0.1275*n*n);
-            var x2coef     = Math.round(-0.2006987 + (-0.0258973)*n + 0.0005293*n*n);
-	    var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
-        } 
+        //} else if (shape_choice === 2) {
+        } else {
+        */
+        var intercept  = Math.round(0.3553 + (-0.2145)*d + 0.1275*d*d);
+        var x2coef     = Math.round(-0.2006987 + (-0.0258973)*d + 0.0005293*d*d);
+        var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
+        //} 
 	//alert([h,c,s])
         var l = (n - 1)/2;
 
@@ -156,7 +163,6 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
 
 	//construct firing vector
 	var v = new Float32Array(n*n);
-        let r = n/2;
 	for (var j = 0; j < n; j++){
 		for (var i = 0; i < n; i++){
 		    v[n*j + i] = p(i, j);
@@ -171,10 +177,13 @@ SAND.prototype.surface_method = function(n, shape_choice){
 	v = this.approximate_firing_vector_identity(n, shape_choice);
 	this.fire_vector(v);	
         // fire sink if not circle
-        if (shape_choice !== 2) {
+        /*
+        if (shape_choice === 1) {
 	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
 	    this.fire_sink(k + 15);	
         }
+        */
+        console.log("time to stabilize!");
 	this.stabilize(); //this one also takes time */
 };
 
