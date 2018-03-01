@@ -159,18 +159,9 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         let r = n/2;
 	for (var j = 0; j < n; j++){
 		for (var i = 0; i < n; i++){
-                        let x = i - r;
-                        let y = j - r;
-                        if (x*x + y*y < (r*r) - 1){
-			    //v[n*j + i] = p(i, j);
-			    v[n*j + i] = 0;
-                        } else {
-			    v[n*j + i] = 0;
-                        }
+		    v[n*j + i] = p(i, j);
 		}
 	}
-        v[special_id_variable] = 1;
-        special_id_variable++;
 	//console.log(v);
 	return v;
 };
@@ -179,8 +170,11 @@ SAND.prototype.surface_method = function(n, shape_choice){
 	this.reset();		
 	v = this.approximate_firing_vector_identity(n, shape_choice);
 	this.fire_vector(v);	
-	var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-	//this.fire_sink(k + 15);	
+        // fire sink if not circle
+        if (shape_choice !== 2) {
+	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
+	    this.fire_sink(k + 15);	
+        }
 	this.stabilize(); //this one also takes time */
 };
 
