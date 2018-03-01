@@ -132,37 +132,55 @@ SAND.prototype.rec_inverse = function() {
 
 // approximating the identity
 
-SAND.prototype.approximate_firing_vector_identity = function(n) {
+SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
 	//first guess coefficients
 
-	var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
-	var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
-	var s  = Math.round(0.791548224489514*n - 1.158817405099287);
+        // 1 is square
+        if (shape_choice === 1) {
+            var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
+            var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
+            var s  = Math.round(0.791548224489514*n - 1.158817405099287);
+	    var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
+        // 2 is circle
+        } else if (shape_choice === 2) {
+            var intercept  = Math.round(0.3553 + (-0.2145)*n + 0.1275*n*n);
+            var x2coef     = Math.round(-0.2006987 + (-0.0258973)*n + 0.0005293*n*n);
+	    var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
+        } 
 	//alert([h,c,s])
+        var l = (n - 1)/2;
 
-    var l = (n - 1)/2;
-	var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
   
 	//center and scale poly
 	var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
 
 	//construct firing vector
 	var v = new Float32Array(n*n);
+        let r = n/2;
 	for (var j = 0; j < n; j++){
 		for (var i = 0; i < n; i++){
-			v[n*j + i] = p(i, j);
+                        let x = i - r;
+                        let y = j - r;
+                        if (x*x + y*y < (r*r) - 1){
+			    //v[n*j + i] = p(i, j);
+			    v[n*j + i] = 0;
+                        } else {
+			    v[n*j + i] = 0;
+                        }
 		}
 	}
+        v[special_id_variable] = 1;
+        special_id_variable++;
 	//console.log(v);
 	return v;
 };
 
-SAND.prototype.surface_method = function(n){
+SAND.prototype.surface_method = function(n, shape_choice){
 	this.reset();		
-	v = this.approximate_firing_vector_identity(n);
+	v = this.approximate_firing_vector_identity(n, shape_choice);
 	this.fire_vector(v);	
 	var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-	this.fire_sink(k + 15);	
+	//this.fire_sink(k + 15);	
 	this.stabilize(); //this one also takes time */
 };
 

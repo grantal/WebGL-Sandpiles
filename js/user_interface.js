@@ -160,13 +160,15 @@ function set_identity(){
     '$(".thinking").text("Computing identity...");', 
     
     `var id = sand.seek_identity();
-      if (id != null){
+      if (false) {
+      //if (id != null){
         sand.set(sand.identity_saves[id][0]);
       } else {
         var m = sand.shape_choice;
         console.log("shape choice: " + m);
-        if (m == 1 && sand.altered == 0){
-          sand.surface_method(sand.m);
+        if ((m == 1 || m==2) && sand.altered == 0){
+        //if (m == 1 && sand.altered == 0){
+          sand.surface_method(sand.m, m);
           sand.save_identity();
           sand.draw();
         } else {
@@ -193,8 +195,9 @@ function add_identity(){
       } else {
         var m = sand.shape_choice;
         console.log("shape choice: " + m);
+        //if ((m == 1 || m==2) && sand.altered == 0){
         if (m == 1 && sand.altered == 0){
-          sand.surface_method(sand.m);
+          sand.surface_method(sand.m, m);
           sand.save_identity();
           sand.draw();
         } else {
