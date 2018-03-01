@@ -153,62 +153,42 @@ function force_order(f1, f2){
 	promise = first(f1).then(second(f2));
 }
 
+var set_id_command = `var id = sand.seek_identity();
+                      if (id != null){
+                        sand.set(sand.identity_saves[id][0]);
+                      } else {
+                        var m = sand.shape_choice;
+                        console.log("shape choice: " + m);
+                        if ((m == 1 || m==2) && sand.altered == 0){
+                        //if (m == 1 && sand.altered == 0){
+                          sand.surface_method(sand.m, m);
+                          sand.save_identity();
+                          sand.draw();
+                        } else {
+                          sand.naive_method();
+                          sand.save_identity();
+                          sand.draw();}
+                      }
+                      $(".thinking").text("");`
 // sets the board to the identity
 function set_identity(){
 
   force_order(
     '$(".thinking").text("Computing identity...");', 
-    
-    `var id = sand.seek_identity();
-      if (false) {
-      //if (id != null){
-        sand.set(sand.identity_saves[id][0]);
-      } else {
-        var m = sand.shape_choice;
-        console.log("shape choice: " + m);
-        if ((m == 1 || m==2) && sand.altered == 0){
-        //if (m == 1 && sand.altered == 0){
-          sand.surface_method(sand.m, m);
-          sand.save_identity();
-          sand.draw();
-        } else {
-          sand.naive_method();
-          sand.save_identity();
-          sand.draw();}
-      }
-      $(".thinking").text("");`
+    set_id_command 
   );
 }
 
 // adds the board to the identity
 function add_identity(){
-
+  // we store the current state, then set the state to the identity
+  // then we add the saved state to the new state
+  var store_state = 'var curr = sand.get();';
+  var add_state = `var newstate = sand.get();
+                   sand.set(sand.add(curr, newstate));`;
   force_order(
     '$(".thinking").text("Computing identity...");', 
-    
-    ` // store the current state
-      var curr = sand.get(); 
-      // do the stuff that set_identity does
-      var id = sand.seek_identity();
-      if (id != null){
-        sand.set(sand.identity_saves[id][0]);
-      } else {
-        var m = sand.shape_choice;
-        console.log("shape choice: " + m);
-        //if ((m == 1 || m==2) && sand.altered == 0){
-        if (m == 1 && sand.altered == 0){
-          sand.surface_method(sand.m, m);
-          sand.save_identity();
-          sand.draw();
-        } else {
-          sand.naive_method();
-          sand.save_identity();
-          sand.draw();}
-      }
-      // add the original configuration
-      var newstate = sand.get()
-      sand.set(sand.add(curr, newstate));
-      $(".thinking").text("");`
+    store_state + set_id_command + add_state 
   );
 }
 
