@@ -120,6 +120,21 @@ SAND.prototype.get_region = function(state) {
 	return region;
 };
 
+/**
+Takes an index into the the state, like the ones that get_region returns and
+returns the (x,y) coordinates of that point with the center of the sandpile being
+the origin
+*/
+SAND.prototype.convert_state_index_to_coord = function(index) {
+        w = this.statesize.x, h = this.statesize.y;
+        yheight = Math.floor(index / w);
+        xheight = index % w;
+        y = yheight - (h/2);
+        x = xheight - (w/2);
+        return [x,y];
+
+}
+
 SAND.prototype.get_graph = function(state) {
 	var region = [];
 	
