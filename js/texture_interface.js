@@ -126,11 +126,13 @@ returns the (x,y) coordinates of that point with the center of the sandpile bein
 the origin
 */
 SAND.prototype.convert_state_index_to_coord = function(index) {
-        w = this.statesize.x, h = this.statesize.y;
-        yheight = Math.floor(index / w);
-        xheight = index % w;
-        y = yheight - (h/2);
-        x = xheight - (w/2);
+        let w = this.statesize.x;
+        let h = this.statesize.y;
+        let reali = Math.floor(index / 4);
+        let yheight = Math.floor(reali / w);
+        let xheight = reali % w;
+        let y = yheight - (h/2);
+        let x = xheight - (w/2);
         return [x,y];
 
 }

@@ -134,11 +134,12 @@ SAND.prototype.rec_inverse = function() {
 
 SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         // d is the diameter of the circle we're going to approximate the firing vector
-        let d = n;
+        let d = (n/2) + 1;
         if (shape_choice === 1) {
-            d = Math.sqrt(2) * n;
+            d = Math.sqrt(2) * (n/2);
         }
-        /*
+	//construct firing vector
+	var v = new Float32Array(n*n);
         // 1 is square
         if (shape_choice === 1) {
 	    //first guess coefficients
@@ -146,29 +147,37 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
             var s  = Math.round(0.791548224489514*n - 1.158817405099287);
 	    var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
+            var l = (n - 1)/2;
+
+            //center and scale poly
+            var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
+
+            for (var j = 0; j < n; j++){
+                    for (var i = 0; i < n; i++){
+                        v[n*j + i] = p(i, j);
+                    }
+            }
         // 2 is circle
         //} else if (shape_choice === 2) {
         } else {
-        */
-        var intercept  = Math.round(0.3553 + (-0.2145)*d + 0.1275*d*d);
-        var x2coef     = Math.round(-0.2006987 + (-0.0258973)*d + 0.0005293*d*d);
-        var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
-        //} 
-	//alert([h,c,s])
-        var l = (n - 1)/2;
-
-  
-	//center and scale poly
-	var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
-
-	//construct firing vector
-	var v = new Float32Array(n*n);
-	for (var j = 0; j < n; j++){
-		for (var i = 0; i < n; i++){
-		    v[n*j + i] = p(i, j);
-		}
-	}
-	//console.log(v);
+            var intercept  = 0.3553 + (-0.2145)*d + 0.1275*d*d;
+            var x2coef     = -0.2006987 + (-0.0258973)*d + 0.0005293*d*d;
+            //console.log(intercept);
+            //console.log(x2coef);
+            var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
+            //center and scale poly
+            var p = function(x, y) {return -Math.round(model(x, y));};
+            //console.log(model(-9, -49));
+            //in the fire_vector function, each element of v lines up to each element of this.get_region
+            let indices = this.get_region(this.get());
+            console.log(indices);
+            for (var i = 0; i < indices.length; i++){
+                let xy = this.convert_state_index_to_coord(indices[i]); 
+                v[i] = p(xy[0], xy[1]);
+            }
+            
+        } 
+        //console.log(v);
 	return v;
 };
 
@@ -177,14 +186,13 @@ SAND.prototype.surface_method = function(n, shape_choice){
 	v = this.approximate_firing_vector_identity(n, shape_choice);
 	this.fire_vector(v);	
         // fire sink if not circle
-        /*
         if (shape_choice === 1) {
 	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
 	    this.fire_sink(k + 15);	
+        } else {
+            this.fire_sink(1000);
         }
-        */
-        console.log("time to stabilize!");
-	this.stabilize(); //this one also takes time */
+        this.stabilize(); //this one also takes time */
 };
 
 SAND.prototype.naive_method = function() {	
