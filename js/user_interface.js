@@ -159,8 +159,9 @@ var set_id_command = `var id = sand.seek_identity();
                       } else {
                         var m = sand.shape_choice;
                         console.log("shape choice: " + m);
-                        //if ((m == 1 || m==2) && sand.altered == 0){
-                        if (sand.altered == 0){
+                        // square, circle, diamond
+                        if ((m == 1 || m == 2 || m == 4) && sand.altered == 0){
+                        //if (sand.altered == 0){
                           sand.surface_method(sand.m, m);
                           sand.save_identity();
                           sand.draw();
