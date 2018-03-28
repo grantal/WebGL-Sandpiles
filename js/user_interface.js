@@ -153,6 +153,7 @@ function force_order(f1, f2){
 	promise = first(f1).then(second(f2));
 }
 
+// first see if we have a saved id
 var set_id_command = `var id = sand.seek_identity();
                       if (id != null){
                         sand.set(sand.identity_saves[id][0]);
@@ -338,7 +339,11 @@ function init_ui(){
 				sm_add_2.style.display = 'none';
 			};
 		
-		}]
+		}],
+                ['Time Identity methods', function(){
+                    let times = sand.time_id_methods();  
+                    alert("Surface method: " + times[0] + " milliseconds\n Naive method: " + times[1] + " milliseconds")
+                }]
 	])
  
 	var brush = add_dropdown(menubar, "Brush")

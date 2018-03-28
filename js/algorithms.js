@@ -455,3 +455,23 @@ SAND.prototype.pause_markov_approximation = function() {
 	clearInterval(this.markov_timer);
     this.markov_timer = null;
 };
+
+/**
+ * This will report the times it takes to compute the identity with
+ * the surface method and the naive method, respectively
+ */
+SAND.prototype.time_id_methods = function() {
+    var sur_start = new Date();
+    this.surface_method(this.m, this.shape_choice);
+    var sur_finish = new Date();
+    var sur_time = new Date();
+    sur_time.setTime(sur_finish.getTime() - sur_start.getTime());
+    var nai_start = new Date();
+    this.naive_method();
+    var nai_finish = new Date();
+    var nai_time = new Date();
+    nai_time.setTime(nai_finish.getTime() - nai_start.getTime());
+    this.save_identity(); //why not?
+    this.draw();
+    return [sur_time.getMilliseconds(), nai_time.getMilliseconds()];
+};
