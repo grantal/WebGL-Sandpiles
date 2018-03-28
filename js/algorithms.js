@@ -459,19 +459,35 @@ SAND.prototype.pause_markov_approximation = function() {
 /**
  * This will report the times it takes to compute the identity with
  * the surface method and the naive method, respectively
+ * it will do it how ever many times you ask and send you the average time for each
  */
-SAND.prototype.time_id_methods = function() {
-    var sur_start = new Date();
-    this.surface_method(this.m, this.shape_choice);
-    var sur_finish = new Date();
-    var sur_time = new Date();
-    sur_time.setTime(sur_finish.getTime() - sur_start.getTime());
-    var nai_start = new Date();
-    this.naive_method();
-    var nai_finish = new Date();
-    var nai_time = new Date();
-    nai_time.setTime(nai_finish.getTime() - nai_start.getTime());
+SAND.prototype.time_id_methods = function(times_to_test) {
+    let nai_time_sum = 0;
+    let sur_time_sum = 0;
+    for (let i = 0; i < times_to_test; i++) {
+        // naive method
+        var nai_start = new Date();
+        this.naive_method();
+        var nai_finish = new Date();
+        var nai_time = new Date();
+        nai_time.setTime(nai_finish.getTime() - nai_start.getTime());
+
+        // reset
+        this.reset();
+
+        // surface method
+        var sur_start = new Date();
+        this.surface_method(this.m, this.shape_choice);
+        var sur_finish = new Date();
+        var sur_time = new Date();
+        sur_time.setTime(sur_finish.getTime() - sur_start.getTime());
+        
+        nai_time_sum += nai_time.getMilliseconds();
+        sur_time_sum += sur_time.getMilliseconds();
+    }
+
     this.save_identity(); //why not?
     this.draw();
-    return [sur_time.getMilliseconds(), nai_time.getMilliseconds()];
+
+    return [sur_time_sum / times_to_test, nai_time_sum / times_to_test];
 };

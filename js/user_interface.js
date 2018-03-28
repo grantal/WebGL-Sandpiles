@@ -341,8 +341,9 @@ function init_ui(){
 		
 		}],
                 ['Time Identity methods', function(){
-                    let times = sand.time_id_methods();  
-                    alert("Surface method: " + times[0] + " milliseconds\n Naive method: " + times[1] + " milliseconds")
+		    let n = prompt("How many times would you like to run the functions?", 1);
+                    let times = sand.time_id_methods(n);  
+                    alert("Surface method: average " + times[0] + " milliseconds\n Naive method: average " + times[1] + " milliseconds")
                 }]
 	])
  
