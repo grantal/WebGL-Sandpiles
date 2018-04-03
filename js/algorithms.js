@@ -138,7 +138,6 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         if (shape_choice === 1) {
             d = Math.sqrt(2) * n;
         }
-        console.log(d);
 	//construct firing vector
 	var v = new Float32Array(n*n);
         var l = (n - 1)/2;
