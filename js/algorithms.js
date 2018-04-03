@@ -141,6 +141,7 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         console.log(d);
 	//construct firing vector
 	var v = new Float32Array(n*n);
+        var l = (n - 1)/2;
         // 1 is square
         if (shape_choice === 1) {
 	    //first guess coefficients
@@ -148,16 +149,17 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
             var s  = Math.round(0.791548224489514*n - 1.158817405099287);
 	    var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
-            var l = (n - 1)/2;
 
             //center and scale poly
             var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
 
             for (var j = 0; j < n; j++){
-                    for (var i = 0; i < n; i++){
-                        v[n*j + i] = p(i, j);
-                    }
+                for (var i = 0; i < n; i++){
+                    v[n*j + i] = p(i, j);
+                }
             }
+
+
         // 2 is circle
         //} else if (shape_choice === 2) {
         } else {
@@ -165,7 +167,7 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             var x2coef     = -0.2006987 + (-0.0258973)*d + 0.0005293*d*d;
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
             //center and scale poly
-            var p = function(x, y) {return -Math.round(model(x, y));};
+            var p = function(x, y) {return -Math.round(model((x+0.5)/l, (y+0.5)/l));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
             for (var i = 0; i < indices.length; i++){
@@ -186,7 +188,7 @@ SAND.prototype.surface_method = function(n, shape_choice){
 	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
 	    this.fire_sink(k + 15);	
         }
-        this.stabilize(); //this one also takes time */
+        this.stabilize(); //this one also takes time
 };
 
 SAND.prototype.naive_method = function() {	
