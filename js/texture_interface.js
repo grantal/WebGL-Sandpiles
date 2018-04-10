@@ -383,3 +383,74 @@ SAND.prototype.clear_firing_history = function() {
   this.set(state);
 };
 
+// get the laplacian for this graph
+// just depends on the size and shape of the graph,
+// not what sand is there
+SAND.prototype.get_laplacian = function(state) {
+    let region = this.get_graph(state);
+    w = this.statesize.x, h = this.statesize.y;
+    // first pass, if a cell is not zero, put how many nonzero cells 
+    // we've seen before this + 1
+    let nodeSeen = 1;
+    for (let i = 0; i < region.length; i++){
+        if (region[i] != 0) {
+            region[i] = nodeSeen;
+            nodeSeen++;
+        }
+    }
+    console.log(region.filter(i => i != 0))
+    // the height of the matrix is how many nodes there are
+    // in the graph plus one for the sink
+    rows = [];
+    for (let j = 0; j < h; j++){
+        for (let i = 0; i < w; i++){
+            // if there is a node here
+            if (region[j*w + i] != 0) {
+                let myRow = new Array(nodeSeen); //size of rows is number of nodes + 1 for sink
+                myRow.fill(0);
+                // since we're on a grid, all nodes have 4 connections
+                let position = region[j*w + i] - 1;
+                myRow[position] = 4;
+                // check the four nodes around the current one
+                nonSinkConnections = 0;
+                let neighbors = [j*w + (i-1), j*w + (i+1), (j-1)*w + i, (j+1)*w + i];
+                neighbors.forEach(function(k) {
+                    if (region[k] != 0) {
+                        let neigh = region[k] - 1;
+                        myRow[neigh] = -1 
+                        nonSinkConnections++;
+                    }
+                });
+                // add sink connections
+                myRow[myRow.length-1] = -(4 - nonSinkConnections);
+                rows.push(myRow);
+            }
+        }
+    }
+    // add sink row by copying the last column
+    let sinkRow = new Array(nodeSeen);
+    sinkRow.fill(0);
+    let sinkConnects = 0;
+    for(let i = 0; i < rows.length; i++){
+        sinkRow[i] = rows[i][rows[i].length - 1]; 
+        sinkConnects -= sinkRow[i];
+    }
+    sinkRow[sinkRow.length - 1] = sinkConnects;
+    rows.push(sinkRow);
+    return rows;
+}
+
+// set sand by a list using the laplacian ordering
+SAND.prototype.set_l = function (conf){
+    let state = this.get()
+    let region = this.get_graph(state);
+    let confI = 0;
+    for (let i = 0; i < region.length; i++){
+        if (region[i] != 0) {
+            state[4*i] = conf[confI];
+            confI++;    
+        }
+    }
+    this.set(state);
+}
+

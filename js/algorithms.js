@@ -157,6 +157,15 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
                     v[n*j + i] = p(i, j);
                 }
             }
+            console.log("my method");
+            let indices = this.get_region(this.get());
+            var i = 99;
+            var j = 99;
+            let xy = this.convert_state_index_to_coord(indices[n*j+i]); 
+            console.log(xy);
+            console.log(n*j+i, (xy[0]+0.5)/l, (xy[1]+0.5)/l);
+            console.log("original method");
+            console.log(n*j+i, (i-l)/l, (j-l)/l);
 
 
         // 2 is circle
@@ -166,7 +175,7 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             var x2coef     = -0.2006987 + (-0.0258973)*d + 0.0005293*d*d;
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
             //center and scale poly
-            var p = function(x, y) {return -Math.round(model((x+0.5)/l, (y+0.5)/l));};
+            var p = function(x, y) {return Math.round(model((x+0.5)/l, (y+0.5)/l));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
             for (var i = 0; i < indices.length; i++){
@@ -183,11 +192,11 @@ SAND.prototype.surface_method = function(n, shape_choice){
 	v = this.approximate_firing_vector_identity(n, shape_choice);
 	this.fire_vector(v);	
         // fire sink if not circle
-        if (shape_choice === 1) {
+        //if (shape_choice === 1) {
 	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
 	    this.fire_sink(k + 15);	
-        }
-        this.stabilize(); //this one also takes time
+        //}
+        //this.stabilize(); //this one also takes time
 };
 
 SAND.prototype.naive_method = function() {	
