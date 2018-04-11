@@ -133,9 +133,11 @@ SAND.prototype.rec_inverse = function() {
 // approximating the identity
 
 SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
+        /*
         if (shape_choice === 1) {
             d = Math.sqrt(2) * n;
         }
+        */
 	//construct firing vector
 	var v = new Float32Array(n*n);
         var l = (n - 1)/2;
@@ -167,12 +169,12 @@ SAND.prototype.surface_method = function(n, shape_choice){
         else {
             // d is the diameter of the circle we're going to approximate the firing vector
             // need to cast n to a number because it is inexplicable passed as a string
-            let d = Number(n) + 1;
+            let d = Number(n);
             var intercept  = 0.3553 + ((-0.2145)*d) + (0.1275*d*d);
             var x2coef     = -0.2006987 + ((-0.0258973)*d) + (0.0005293*d*d);
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
-            //center and scale poly
-            var p = function(x, y) {return Math.round(model(x, y));};
+            //round poly
+            var p = function(x, y) {return -Math.round(model(x, y));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
             let v = [];
@@ -180,7 +182,7 @@ SAND.prototype.surface_method = function(n, shape_choice){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
                 v.push(p(xy[0], xy[1]));
             }
-            this.fire_vector_l(v);
+            this.fire_vector(v);
         }
         var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
         this.fire_sink(k + 15);	
