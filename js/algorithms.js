@@ -176,11 +176,8 @@ SAND.prototype.surface_method = function(n, shape_choice){
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
             let v = [];
-            let maxx = 0;
-            let maxy = 0;
             for (var i = 0; i < indices.length; i++){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
-                if (xy[0] > maxx) maxx = xy[0];
                 v.push(p(xy[0], xy[1]));
             }
             this.fire_vector_l(v);
