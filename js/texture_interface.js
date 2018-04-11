@@ -398,7 +398,6 @@ SAND.prototype.get_laplacian = function(state) {
             nodeSeen++;
         }
     }
-    console.log(region.filter(i => i != 0))
     // the height of the matrix is how many nodes there are
     // in the graph plus one for the sink
     rows = [];
@@ -437,7 +436,15 @@ SAND.prototype.get_laplacian = function(state) {
     }
     sinkRow[sinkRow.length - 1] = sinkConnects;
     rows.push(sinkRow);
-    return rows;
+    return math.matrix(rows);
+}
+
+// reduced laplacian is the laplacian without the row and column
+// for the sink
+SAND.prototype.get_reduced_laplacian= function(state){
+  let laplacian = this.get_laplacian(state);
+  return laplacian.resize([laplacian.size()[0]-1,
+                           laplacian.size()[1]-1]); 
 }
 
 // set sand by a list using the laplacian ordering
@@ -452,5 +459,11 @@ SAND.prototype.set_l = function (conf){
         }
     }
     this.set(state);
+}
+
+// fire a vector with the laplacian
+SAND.prototype.fire_vector_l = function(vec){
+  let laplacian = this.get_reduced_laplacian(this.get());
+  this.set_l(math.multiply(laplacian, vec).valueOf());
 }
 
