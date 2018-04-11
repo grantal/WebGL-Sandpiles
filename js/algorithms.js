@@ -163,8 +163,8 @@ SAND.prototype.surface_method = function(n, shape_choice){
             v = this.approximate_firing_vector_identity(n, shape_choice);
             this.fire_vector(v);	
         }
-        // circle
-        else if (shape_choice === 2) {
+        // circle or diamond
+        else {
             // d is the diameter of the circle we're going to approximate the firing vector
             // need to cast n to a number because it is inexplicable passed as a string
             let d = Number(n) + 1;
