@@ -140,33 +140,25 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         */
 	//construct firing vector
 	var v = new Float32Array(n*n);
-        var l = (n - 1)/2;
-        //first guess coefficients
-        var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
-        var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
-        var s  = Math.round(0.791548224489514*n - 1.158817405099287);
-        var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
-
-        //center and scale poly
-        var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
-
-        for (var j = 0; j < n; j++){
-            for (var i = 0; i < n; i++){
-                v[n*j + i] = p(i, j);
-            }
-        }
-	return v;
-};
-
-SAND.prototype.surface_method = function(n, shape_choice){
-	this.reset();		
         // square
         if (shape_choice === 1) {
-            v = this.approximate_firing_vector_identity(n, shape_choice);
-            this.fire_vector(v);	
-        }
+            var l = (n - 1)/2;
+            //first guess coefficients
+            var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
+            var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
+            var s  = Math.round(0.791548224489514*n - 1.158817405099287);
+            var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
+
+            //center and scale poly
+            var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
+
+            for (var j = 0; j < n; j++){
+                for (var i = 0; i < n; i++){
+                    v[n*j + i] = p(i, j);
+                }
+            }
         // circle or diamond
-        else {
+        } else {
             // d is the diameter of the circle we're going to approximate the firing vector
             // need to cast n to a number because it is inexplicable passed as a string
             let d = Number(n);
@@ -177,13 +169,19 @@ SAND.prototype.surface_method = function(n, shape_choice){
             var p = function(x, y) {return -Math.round(model(x, y));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
-            let v = [];
             for (var i = 0; i < indices.length; i++){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
-                v.push(p(xy[0], xy[1]));
+                v[i] = p(xy[0], xy[1]);
             }
-            this.fire_vector(v);
+
         }
+	return v;
+};
+
+SAND.prototype.surface_method = function(n, shape_choice){
+	this.reset();		
+        v = this.approximate_firing_vector_identity(n, shape_choice);
+        this.fire_vector(v);	
         var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
         this.fire_sink(k + 15);	
         this.stabilize(); //this one also takes time
