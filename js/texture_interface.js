@@ -319,7 +319,6 @@ SAND.prototype.save = function() {
 
 SAND.prototype.seek_identity = function() {
 	var region = this.get_graph(this.get());
-	console.log("current region: " +region)
 	for (var i = 0; i < this.identity_saves.length; i++){
 		
 		var equal = true;
@@ -461,7 +460,7 @@ SAND.prototype.set_l = function (conf){
     this.set(state);
 }
 
-// fire a vector with the laplacian
+// fire a vector using the laplacian
 SAND.prototype.fire_vector_l = function(vec){
   let laplacian = this.get_reduced_laplacian(this.get());
   this.set_l(math.multiply(laplacian, vec).valueOf());

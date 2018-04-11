@@ -133,70 +133,61 @@ SAND.prototype.rec_inverse = function() {
 // approximating the identity
 
 SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
-        // d is the diameter of the circle we're going to approximate the firing vector
-        let d = n + 1;
         if (shape_choice === 1) {
             d = Math.sqrt(2) * n;
         }
 	//construct firing vector
 	var v = new Float32Array(n*n);
         var l = (n - 1)/2;
-        // 1 is square
-        if (shape_choice === 1) {
-	    //first guess coefficients
-            var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
-            var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
-            var s  = Math.round(0.791548224489514*n - 1.158817405099287);
-	    var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
+        //first guess coefficients
+        var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
+        var c  = Math.round(-0.8361720629239193 + 1.4848313882485358*Math.log(n));
+        var s  = Math.round(0.791548224489514*n - 1.158817405099287);
+        var model = function(x, y) {return h + (s-h)*(x*x + y*y) + (c + h - 2*s)*((x*x)*(y*y));};
 
-            //center and scale poly
-            var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
+        //center and scale poly
+        var p = function(x, y) {return -Math.round(model((x - l)/l, (y - l)/l));};
 
-            for (var j = 0; j < n; j++){
-                for (var i = 0; i < n; i++){
-                    v[n*j + i] = p(i, j);
-                }
+        for (var j = 0; j < n; j++){
+            for (var i = 0; i < n; i++){
+                v[n*j + i] = p(i, j);
             }
-            console.log("my method");
-            let indices = this.get_region(this.get());
-            var i = 99;
-            var j = 99;
-            let xy = this.convert_state_index_to_coord(indices[n*j+i]); 
-            console.log(xy);
-            console.log(n*j+i, (xy[0]+0.5)/l, (xy[1]+0.5)/l);
-            console.log("original method");
-            console.log(n*j+i, (i-l)/l, (j-l)/l);
-
-
-        // 2 is circle
-        //} else if (shape_choice === 2) {
-        } else {
-            var intercept  = 0.3553 + (-0.2145)*d + 0.1275*d*d;
-            var x2coef     = -0.2006987 + (-0.0258973)*d + 0.0005293*d*d;
-            var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
-            //center and scale poly
-            var p = function(x, y) {return Math.round(model((x+0.5)/l, (y+0.5)/l));};
-            //in the fire_vector function, each element of v lines up to each element of this.get_region
-            let indices = this.get_region(this.get());
-            for (var i = 0; i < indices.length; i++){
-                let xy = this.convert_state_index_to_coord(indices[i]); 
-                v[i] = p(xy[0], xy[1]);
-            }
-            
-        } 
+        }
 	return v;
 };
 
 SAND.prototype.surface_method = function(n, shape_choice){
 	this.reset();		
-	v = this.approximate_firing_vector_identity(n, shape_choice);
-	this.fire_vector(v);	
-        // fire sink if not circle
-        //if (shape_choice === 1) {
-	    var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-	    this.fire_sink(k + 15);	
-        //}
-        //this.stabilize(); //this one also takes time
+        // square
+        if (shape_choice === 1) {
+            v = this.approximate_firing_vector_identity(n, shape_choice);
+            this.fire_vector(v);	
+        }
+        // circle
+        else if (shape_choice === 2) {
+            // d is the diameter of the circle we're going to approximate the firing vector
+            // need to cast n to a number because it is inexplicable passed as a string
+            let d = Number(n) + 1;
+            var intercept  = 0.3553 + ((-0.2145)*d) + (0.1275*d*d);
+            var x2coef     = -0.2006987 + ((-0.0258973)*d) + (0.0005293*d*d);
+            var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
+            //center and scale poly
+            var p = function(x, y) {return Math.round(model(x, y));};
+            //in the fire_vector function, each element of v lines up to each element of this.get_region
+            let indices = this.get_region(this.get());
+            let v = [];
+            let maxx = 0;
+            let maxy = 0;
+            for (var i = 0; i < indices.length; i++){
+                let xy = this.convert_state_index_to_coord(indices[i]); 
+                if (xy[0] > maxx) maxx = xy[0];
+                v.push(p(xy[0], xy[1]));
+            }
+            this.fire_vector_l(v);
+        }
+        var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
+        this.fire_sink(k + 15);	
+        this.stabilize(); //this one also takes time
 };
 
 SAND.prototype.naive_method = function() {	
