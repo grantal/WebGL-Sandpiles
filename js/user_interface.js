@@ -159,7 +159,6 @@ var set_id_command = `var id = sand.seek_identity();
                         sand.set(sand.identity_saves[id][0]);
                       } else {
                         var m = sand.shape_choice;
-                        console.log("shape choice: " + m);
                         // square, circle, diamond
                         if ((m == 1 || m == 2 || m == 4) && sand.altered == 0){
                         //if (sand.altered == 0){

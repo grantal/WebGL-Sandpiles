@@ -21,7 +21,6 @@ SAND.prototype.start = function() {
 	//console.log(this.speed)
 	var n = this.speed.x;
 	var m = this.speed.y;
-	console.log(n, m)
     if (this.timer == null) {
         this.timer = setInterval(function(){
             for (var i = 0; i < n; i++){
