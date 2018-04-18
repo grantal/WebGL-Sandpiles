@@ -161,20 +161,29 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         } else {
             // d is the diameter of the circle we're going to approximate the firing vector
             // need to cast n to a number because it is inexplicable passed as a string
-            let d = Number(n);
+            //let d = Math.round(Number(n)*);
+            let d = Number(n) + 2;
             var intercept  = 0.3553 + ((-0.2145)*d) + (0.1275*d*d);
-            var x2coef     = -0.2006987 + ((-0.0258973)*d) + (0.0005293*d*d);
+            //var intercept  = Math.exp(0.763066 + 0.135660*d);
+            console.log(intercept);
+            //var x2coef     = -0.2006987 + ((-0.0258973)*d) + (0.0005293*d*d);
+            //var x2coef     = -0.1681-(0.1023*Math.log(d));
+            var x2coef = -0.5;
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
             //round poly
+            //var p = function(x, y) {return Math.max(Math.round(model(x, y)),0);};
             var p = function(x, y) {return -Math.round(model(x, y));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
+            v = [];
             for (var i = 0; i < indices.length; i++){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
-                v[i] = p(xy[0], xy[1]);
+                v.push(p(xy[0], xy[1]));
+                //v[i] = p(xy[0], xy[1]);
             }
 
         }
+        console.log(v);
 	return v;
 };
 
@@ -183,7 +192,7 @@ SAND.prototype.surface_method = function(n, shape_choice){
         v = this.approximate_firing_vector_identity(n, shape_choice);
         this.fire_vector(v);	
         var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-        this.fire_sink(k + 15);	
+        //this.fire_sink(k + 15);	
         this.stabilize(); //this one also takes time
 };
 
