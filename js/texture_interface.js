@@ -312,6 +312,29 @@ SAND.prototype.fire_vector = function(vector) {
 	return 1;
 };
 
+// made this function so I only need to make one call to get_region and this.get()
+SAND.prototype.fire_vector_region = function(vector, region) {
+	var gl = this.gl, w = this.statesize.x, h = this.statesize.y;
+	var newstate = this.get();
+
+	for (var i = 0; i < vector.length; i += 1){
+		var j = region[i];
+		var n = vector[i];
+		newstate[region[i]] -= 4*n;
+		
+		newstate[j + 4] += n;			
+		newstate[j - 4] += n;			
+		newstate[j + 4*w] += n;			
+		newstate[j - 4*w] += n;			
+
+		newstate[j + 3] += n;
+	}
+
+	sand.set(newstate);
+	sand.draw(); 
+	return 1;
+};
+
 SAND.prototype.save = function() {
 	this.saves.push(sand.get());
 	this.save_id = this.save_id + 1;	

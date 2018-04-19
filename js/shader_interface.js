@@ -244,6 +244,18 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
       programInfo.uniformLocations.gridToPointsMatrix,
       false,
       sandObj.gridToPointsMatrix);
+
+  /*
+  let allMat = mat4.create();
+  mat4.mul(allMat, projectionMatrix, modelViewMatrix); 
+  mat4.mul(allMat, allMat, sandObj.gridToPointsMatrix); 
+  let invMat = mat4.create();
+  mat4.invert(invMat, allMat);
+  let mypos = vec4.fromValues(5,0,5,0);
+  vec4.transformMat4(mypos, mypos, invMat);
+  console.log(mypos);
+  */
+
   // color scheme also can affect the height in 3D mode
   gl.uniform1f(
       programInfo.uniformLocations.colorScheme,

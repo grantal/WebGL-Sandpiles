@@ -133,15 +133,10 @@ SAND.prototype.rec_inverse = function() {
 // approximating the identity
 
 SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
-        /*
-        if (shape_choice === 1) {
-            d = Math.sqrt(2) * n;
-        }
-        */
-	//construct firing vector
-	var v = new Float32Array(n*n);
         // square
         if (shape_choice === 1) {
+            //construct firing vector
+            var v = new Float32Array(n*n);
             var l = (n - 1)/2;
             //first guess coefficients
             var h  = Math.round(0.1674411791810444*n*n + 0.18971510117164725*n - 2.797811919063292);
@@ -157,6 +152,7 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
                     v[n*j + i] = p(i, j);
                 }
             }
+	    return v;
         // circle or diamond
         } else {
             // d is the diameter of the circle we're going to approximate the firing vector
@@ -165,9 +161,6 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             let d = Number(n)+1;
             var intercept  = 0.3553 + ((-0.2145)*d) + (0.1275*d*d);
             //var intercept  = Math.exp(0.763066 + 0.135660*d);
-            //console.log(intercept);
-            //var x2coef     = -0.2006987 + ((-0.0258973)*d) + (0.0005293*d*d);
-            //var x2coef     = -0.1681-(0.1023*Math.log(d));
             var x2coef = -0.5;
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
             //round poly
@@ -175,25 +168,28 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
             var p = function(x, y) {return -Math.round(model(x, y));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
-            v = [];
+            //v = [];
+            //construct firing vector
+            let r = (d/2);
+	    var v = new Float32Array(Math.ceil(r*r*3.14159265359));
             for (var i = 0; i < indices.length; i++){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
-                v.push(p(xy[0], xy[1]));
-                //v[i] = p(xy[0], xy[1]);
+                //v.push(p(xy[0], xy[1]));
+                v[i] = p(xy[0], xy[1]);
             }
-
+            this.fire_vector_region(v, indices);
         }
-        //console.log(v);
-	return v;
 };
 
 SAND.prototype.surface_method = function(n, shape_choice){
 	this.reset();		
-        v = this.approximate_firing_vector_identity(n, shape_choice);
-        this.fire_vector(v);	
         if (shape_choice === 1){
+            v = this.approximate_firing_vector_identity(n, shape_choice);
+            this.fire_vector(v);	
             var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
             this.fire_sink(k + 15);	
+        } else {
+            this.approximate_firing_vector_identity(n, shape_choice);
         }
         this.stabilize(); //this one also takes time
 };
