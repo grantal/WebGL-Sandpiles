@@ -190,6 +190,8 @@ SAND.prototype.surface_method = function(n, shape_choice){
             this.fire_sink(k + 15);	
         } else {
             this.approximate_firing_vector_identity(n, shape_choice);
+            var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
+            this.fire_sink(k + 15);	
         }
         this.stabilize(); //this one also takes time
 };
@@ -496,3 +498,29 @@ SAND.prototype.time_id_methods = function(times_to_test) {
 
     return [sur_time_sum / times_to_test, nai_time_sum / times_to_test];
 };
+
+
+/**
+ * this will confirm for each diameter that the configuration
+ * produced by surface method is recurrent
+ */
+SAND.prototype.confirm_identity = function(){
+    let bad_ds = []; // diameters where identity doesnt work
+    for(let i = 1; i <= 100; i++){
+        this.m = i;
+        this.n = i;
+        this.surface_method(this.m, this.shape_choice);
+        // if we fire the sink and get the same configuration, then it
+        // is recurrent
+        oldstate = this.get();
+        this.fire_sink(1);	
+        this.stabilize();
+        newstate = this.get();
+        if (!this.is_equal(newstate, oldstate)){		
+            bad_ds.push(i);
+        }
+    }
+    console.log(bad_ds);
+}
+
+
