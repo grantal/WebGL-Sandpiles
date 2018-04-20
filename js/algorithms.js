@@ -190,8 +190,8 @@ SAND.prototype.surface_method = function(n, shape_choice){
             this.fire_sink(k + 15);	
         } else {
             this.approximate_firing_vector_identity(n, shape_choice);
-            var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-            this.fire_sink(k + 15);	
+            //var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
+            //this.fire_sink(k + 15);	
         }
         this.stabilize(); //this one also takes time
 };
@@ -521,6 +521,21 @@ SAND.prototype.confirm_identity = function(){
         }
     }
     console.log(bad_ds);
+}
+
+SAND.prototype.number_of_firings_needed = function(){
+    let bad_ds = [];
+    for(let i = 1; i <= 510; i++){
+        this.m = i;
+        this.n = i;
+        this.surface_method(this.m, this.shape_choice);
+        let fires = this.fire_sink_until_id();	
+        bad_ds.push((i,fires));
+    }
+    mys = "";
+    bad_ds.forEach(function(e){mys+=e+","});
+    console.log(mys);
+    return bad_ds;
 }
 
 
