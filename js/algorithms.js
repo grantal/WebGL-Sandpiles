@@ -190,8 +190,11 @@ SAND.prototype.surface_method = function(n, shape_choice){
             this.fire_sink(k + 15);	
         } else {
             this.approximate_firing_vector_identity(n, shape_choice);
-            //var k = 0.01285796899499506*n*n + -0.14120481213637398*n + 3.916531993030239;	
-            //this.fire_sink(k + 15);	
+            // if n is larger than the size of the table, then you don't need to fire
+            if (n < firing_table_circle.length){
+                this.fire_sink(firing_table_circle[n]);	
+                console.log(firing_table_circle[n]);
+            }
         }
         this.stabilize(); //this one also takes time
 };
@@ -506,7 +509,7 @@ SAND.prototype.time_id_methods = function(times_to_test) {
  */
 SAND.prototype.confirm_identity = function(){
     let bad_ds = []; // diameters where identity doesnt work
-    for(let i = 1; i <= 100; i++){
+    for(let i = 1; i <= 510; i++){
         this.m = i;
         this.n = i;
         this.surface_method(this.m, this.shape_choice);
@@ -538,4 +541,8 @@ SAND.prototype.number_of_firings_needed = function(){
     return bad_ds;
 }
 
+
+const firing_table_circle = [
+0,0,0,0,0,1,2,1,2,2,0,2,2,2,1,2,2,3,4,4,2,5,3,5,1,4,2,4,4,4,3,4,3,6,3,6,3,6,5,6,4,6,3,6,5,6,3,6,3,5,2,9,5,7,5,7,3,8,2,7,4,6,2,6,3,5,5,5,5,5,4,4,2,8,1,8,2,7,3,7,2,5,0,5,2,5,1,4,1,4,0,3,0,2,0,2,0,1,0,5,0,4,1,3,0,3,0,2
+];
 
