@@ -193,7 +193,6 @@ SAND.prototype.surface_method = function(n, shape_choice){
             // if n is larger than the size of the table, then you don't need to fire
             if (n < firing_table_circle.length){
                 this.fire_sink(firing_table_circle[n]);	
-                console.log(firing_table_circle[n]);
             }
         }
         this.stabilize(); //this one also takes time
