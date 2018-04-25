@@ -342,8 +342,7 @@ function init_ui(){
                 ['Time Identity methods', function(){
 		    let n = prompt("How many times would you like to run the functions?", 1);
                     let times = sand.time_id_methods(n);  
-                    alert("Surface method: average " + times[0] + " milliseconds\n Naive method: average " + times[1] + " milliseconds");
-		    console.log("Surface method: average " + times[0] + " milliseconds\n Naive method: average " + times[1] + " milliseconds");
+                    alert("Surface method: average " + times[0] + " milliseconds\n Naive method: average " + times[1] + " milliseconds")
                 }]
 	])
  
@@ -974,6 +973,7 @@ function init_ui(){
         $("#highlights-close").click( function closeHighlights() {
 	    $("#highlights").css("display","none");
         });
+	$("#highlights").css("display","block");
 
         // Make highlights buttons work
         $("#markonoffswitch").click(function highslightsMarkov() {sand.markov_process(10);});
