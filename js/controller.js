@@ -155,6 +155,11 @@ SAND.prototype.zoom = function(coords, dir) {
 };
 
 SAND.prototype.brush = function(x, y, choice, type) {
+    // do no brushing in 3d
+    if (!this.is2D){
+        return null;
+    }
+
     var gl = this.gl, w = this.statesize.x, h = this.statesize.y;
     var state = this.get();
 	var index = (x + y*w)*4;
