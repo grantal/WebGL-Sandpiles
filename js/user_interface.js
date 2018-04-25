@@ -602,13 +602,21 @@ function init_ui(){
 		console.log('size slider: ' + n);
 		sand.m = n;
 		sand.n = n;
+                 
 		if (sand.shape_choice != 3){
 			sand.set_surface(sand.shape_choice);
 		} else {
 			sand.set_surface(sand.shape_choice, 2);
 		}
+
 	});
 
+        size_slider.onmouseup = function(){
+              // if in 3d mode, we need to reset the buffers now
+              if (!sand.is2D){
+                sand.make_buffers_wrapper();
+              }
+        };
 	size_slider.style.position = 'fixed';
 	size_slider.style.right = '80px';
 	size_slider.style.bottom = '14px';
