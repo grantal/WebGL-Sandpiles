@@ -266,7 +266,15 @@ void main(void) {
     vertexAdder = vec4(0.0, uHeightMultiplier * float(size), 0.0, 0.0); 
 
     vColor = encode(result);
-    vBC = aBarycentric;
+    float i = aVertexPosition.x;
+    float j = aVertexPosition.z;
+    if (mod(i+j,float(3)) == 0.0){
+        vBC = vec3(1,0,0);
+    } else if (mod(i+j,float(3)) == 1.0){
+        vBC = vec3(0,1,0);
+    } else {
+        vBC = vec3(0,0,1);
+    }
     
     // if cell is a sink, don't render it
     if (cell.g != 0){
