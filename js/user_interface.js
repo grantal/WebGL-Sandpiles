@@ -1038,5 +1038,8 @@ function init_ui(){
           sand.draw();
           return false;
         });
-        
+        $('#resetcameraform').submit(function resetcameraformsubmit() {
+          sand.reset_camera();
+          return false;
+        });
 }

@@ -271,7 +271,6 @@ SAND.prototype.markov_process = function(n) {
 					sand.step(0);
 					unst = sand.check_unstable();
 				} */
-				console.log(unst);
 				
 				if (!unst){
 					sand.set(sand.add_random(sand.get()));
