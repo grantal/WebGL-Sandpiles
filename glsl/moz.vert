@@ -1,4 +1,5 @@
 attribute vec4 aVertexPosition;
+attribute vec3 aBarycentric;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
@@ -15,6 +16,7 @@ uniform float uLength; // "y" direction (sand.n)
 int color_choice = int(uColorScheme);
 
 varying lowp vec4 vColor;
+varying lowp vec3 vBC;
 
 uniform sampler2D uSampler;
 
@@ -264,6 +266,7 @@ void main(void) {
     vertexAdder = vec4(0.0, uHeightMultiplier * float(size), 0.0, 0.0); 
 
     vColor = encode(result);
+    vBC = aBarycentric;
     
     // if cell is a sink, don't render it
     if (cell.g != 0){

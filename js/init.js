@@ -12,7 +12,7 @@ function SAND(canvas) {
     this.w = canvas.width;
 	this.h = canvas.height;
 	
-	this.d = 100;
+	this.d = 50;
 	
     this.viewsize = vec2(this.w, this.h); // init zoom 
 	this.statesize = vec2(this.w, this.h);
@@ -61,7 +61,7 @@ function SAND(canvas) {
 	this.firing_vectors = [];
 	this.firing_vector_id = 0;
 	
-	this.shape_choice = 2; //default to square
+	this.shape_choice = 1; //default to square
 	this.altered = 0;
 	
 	this.identity = null;
@@ -139,6 +139,7 @@ SAND.prototype.initShaders = function(){
     program: shaderProgram,
     attribLocations: {
       vertexPosition: this.gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+      barycentric: this.gl.getAttribLocation(shaderProgram, 'aBarycentric'),
     },
     uniformLocations: {
       projectionMatrix: this.gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -288,10 +289,29 @@ SAND.prototype.initBuffers = function (gl) {
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
       new Uint16Array(indices), gl.STATIC_DRAW);
 
+  const barycentricBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, barycentricBuffer);
+  let baryCoords = [];
+  for (let i = 0; i < this.m; i += 1) {
+    for (let j = 0; j < this.n; j += 1) {
+      if ((i+j) % 3 === 0){
+          baryCoords = baryCoords.concat(1,0,0);
+      } else if ((i+j) % 3 === 1){
+          baryCoords = baryCoords.concat(0,1,0); 
+      } else {
+          baryCoords = baryCoords.concat(0,0,1);
+      }
+    }
+  }
+
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(baryCoords), gl.STATIC_DRAW);
+
   return {
     position: positionBuffer,
     indices: indexBuffer,
     vertexCount: indices.length,
+    barycentric: barycentricBuffer
   };
 }
 

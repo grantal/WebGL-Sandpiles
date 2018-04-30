@@ -224,6 +224,25 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
         programInfo.attribLocations.vertexPosition);
   }
 
+  // barycentric
+  {
+    const numComponents = 3;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.barycentric);
+    gl.vertexAttribPointer(
+        programInfo.attribLocations.barycentric,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset);
+    gl.enableVertexAttribArray(
+        programInfo.attribLocations.barycentric);
+  }
+
   // Tell WebGL which indices to use to index the vertices
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
