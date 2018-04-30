@@ -476,6 +476,9 @@ function init_ui(){
 		['Reset camera', function(){
                     sand.reset_camera();
 		}],
+		['Toggle wireframe', function(){
+                    sand.wireframe = !sand.wireframe;
+		}],
 	])
 	
 	var window = add_dropdown(menubar, "Window")

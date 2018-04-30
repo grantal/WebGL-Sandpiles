@@ -9,6 +9,7 @@ uniform float uHeightMultiplier;
 uniform mat4 uGridMatrix;
 uniform float uWidth;  // "x" direction (sand.m)
 uniform float uLength; // "y" direction (sand.n)
+uniform float uWF; // if >0.9, display wireframe
 
 
 
@@ -266,14 +267,18 @@ void main(void) {
 
     vColor = encode(result);
 
-    float i = aVertexPosition.x;
-    float j = aVertexPosition.z;
-    if (mod(i+j,float(3)) == 0.0){
-        vBC = vec3(1,0,0);
-    } else if (mod(i+j,float(3)) == 1.0){
-        vBC = vec3(0,1,0);
+    if (uWF > 0.9){
+        float i = aVertexPosition.x;
+        float j = aVertexPosition.z;
+        if (mod(i+j,float(3)) == 0.0){
+            vBC = vec3(1,0,0);
+        } else if (mod(i+j,float(3)) == 1.0){
+            vBC = vec3(0,1,0);
+        } else {
+            vBC = vec3(0,0,1);
+        }
     } else {
-        vBC = vec3(0,0,1);
+        vBC = vec3(1,1,1);
     }
     
     // if cell is a sink, don't render it

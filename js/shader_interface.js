@@ -269,6 +269,9 @@ function drawScene(gl, programInfo, buffers, texture, xRotation, yRotation, sand
   gl.uniform1f(
       programInfo.uniformLocations.length,
       sandObj.n);
+  gl.uniform1f(
+      programInfo.uniformLocations.wireframe,
+      sandObj.wireframe);
 
 
     // Specify the texture to map onto the faces.

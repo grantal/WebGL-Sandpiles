@@ -101,6 +101,7 @@ function SAND(canvas) {
     this.set_outdegree();
 
   this.is2D = true;
+  this.wireframe = false;
   // So the height data will start as integers and then in the shader we will multiply the integer
   // height by heightMult to get the y coordinate.
   this.heightMult = 0.05;
@@ -149,6 +150,7 @@ SAND.prototype.initShaders = function(){
       heightMult: this.gl.getUniformLocation(shaderProgram, 'uHeightMultiplier'),
       width: this.gl.getUniformLocation(shaderProgram, 'uWidth'),
       length: this.gl.getUniformLocation(shaderProgram, 'uLength'),
+      wireframe: this.gl.getUniformLocation(shaderProgram, 'uWF'),
     },
   };
   return false;
