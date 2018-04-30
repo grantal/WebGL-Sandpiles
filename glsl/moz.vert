@@ -1,5 +1,4 @@
 attribute vec4 aVertexPosition;
-attribute vec3 aBarycentric;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
@@ -266,6 +265,7 @@ void main(void) {
     vertexAdder = vec4(0.0, uHeightMultiplier * float(size), 0.0, 0.0); 
 
     vColor = encode(result);
+
     float i = aVertexPosition.x;
     float j = aVertexPosition.z;
     if (mod(i+j,float(3)) == 0.0){
