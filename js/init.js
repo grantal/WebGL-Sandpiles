@@ -61,7 +61,7 @@ function SAND(canvas) {
 	this.firing_vectors = [];
 	this.firing_vector_id = 0;
 	
-	this.shape_choice = 2; //default to square
+	this.shape_choice = 1; //default to square
 	this.altered = 0;
 	
 	this.identity = null;
