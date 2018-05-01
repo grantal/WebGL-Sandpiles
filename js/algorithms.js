@@ -157,20 +157,17 @@ SAND.prototype.approximate_firing_vector_identity = function(n, shape_choice) {
         } else {
             // d is the diameter of the circle we're going to approximate the firing vector
             // need to cast n to a number because it is inexplicable passed as a string
-            //let d = Math.round(Number(n)*);
             let d = Number(n)+1;
+            let r = (d/2);
             var intercept  = 0.3553 + ((-0.2145)*d) + (0.1275*d*d);
-            //var intercept  = Math.exp(0.763066 + 0.135660*d);
-            var x2coef = -0.5;
+            //var x2coef = -0.5;
+            var x2coef = -(intercept/((r+1)*(r+1)));
             var model = function(x, y) {return intercept + x2coef*(x*x + y*y);};
             //round poly
-            //var p = function(x, y) {return Math.max(Math.round(model(x, y)),0);};
             var p = function(x, y) {return -Math.round(model(x, y));};
             //in the fire_vector function, each element of v lines up to each element of this.get_region
             let indices = this.get_region(this.get());
-            //v = [];
             //construct firing vector
-            let r = (d/2);
 	    var v = new Float32Array(Math.ceil(r*r*3.14159265359));
             for (var i = 0; i < indices.length; i++){
                 let xy = this.convert_state_index_to_coord(indices[i]); 
@@ -190,10 +187,6 @@ SAND.prototype.surface_method = function(n, shape_choice){
             this.fire_sink(k + 15);	
         } else {
             this.approximate_firing_vector_identity(n, shape_choice);
-            // if n is larger than the size of the table, then you don't need to fire
-            if (n < firing_table_circle.length){
-                this.fire_sink(firing_table_circle[n]);	
-            }
         }
         this.stabilize(); //this one also takes time
 };
