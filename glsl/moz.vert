@@ -36,7 +36,7 @@ ivec4 get(float givenx, float giveny){ //lookup at current spot with some pixel 
 }
 
 vec4 encode (ivec4 data){
-	return vec4(float(data.r)/float(255), float(data.g)/float(255), float(data.b)/float(255), float(data.a)/float(255));
+	return vec4(float(data.r)/255.0, float(data.g)/float(255), float(data.b)/float(255), 1.0);
 }
 
 int hundreds(int n, int base){

@@ -16,7 +16,7 @@ ivec4 decode (vec4 data){
 }
 
 vec4 encode (ivec4 data){
-	return vec4(float(data.r)/float(255), float(data.g)/float(255), float(data.b)/float(255), float(data.a)/float(255));
+	return vec4(float(data.r)/float(255), float(data.g)/float(255), float(data.b)/float(255), 1.0);
 }
 
 ivec4 get(int x, int y){ //lookup at current spot with some pixel offset
